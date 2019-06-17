@@ -10,8 +10,9 @@ local prefabs = {}
 
 --人物出生自带的物品
 local start_inv = {
-	"thorne_dachi",
-	"rock_shovel",
+	--"thorne_dachi",
+	--"rock_shovel",
+	"stealth_dachi",
 	-- "fox_mask"
 }
 

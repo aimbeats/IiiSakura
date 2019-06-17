@@ -33,8 +33,8 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
      
     MakeInventoryPhysics(inst)   
       
-    inst.AnimState:SetBank("rock_shovel")
-    inst.AnimState:SetBuild("rock_shovel")
+    inst.AnimState:SetBank("stealth_dachi")
+    inst.AnimState:SetBuild("stealth_dachi")
     inst.AnimState:PlayAnimation("idle")
 
 	if not TheWorld.ismastersim then
@@ -44,8 +44,8 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.entity:SetPristine()
 
     inst:AddComponent("inventoryitem")--添加物品栏物品组件，只有有了这个组件，你才能把这个物品捡起放到物品栏里。
-    inst.components.inventoryitem.imagename = "rock_shovel" --物品栏图片的名字
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/rock_shovel.xml"--物品栏图片的xml文件。为什么会有这么两句呢？在单个文件下也许会迷惑，但如果换成一个张大图就容易理解了。举个例子，游戏的操作界面,HUD，你可以在data\images下找到HUD.tex，用textool打开就会看到是一整张大的图片，包含了整个操作界面的所有图片，xml就是用来切割分块这张大的图片，并分别给它们重新命名的，新的命名就会被前面的imagename 使用。
+    inst.components.inventoryitem.imagename = "stealth_dachi" --物品栏图片的名字
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/stealth_dachi.xml"--物品栏图片的xml文件。为什么会有这么两句呢？在单个文件下也许会迷惑，但如果换成一个张大图就容易理解了。举个例子，游戏的操作界面,HUD，你可以在data\images下找到HUD.tex，用textool打开就会看到是一整张大的图片，包含了整个操作界面的所有图片，xml就是用来切割分块这张大的图片，并分别给它们重新命名的，新的命名就会被前面的imagename 使用。
 
     inst:AddComponent("equippable")--添加可装备组件，有了这个组件，你才能装备物品
     inst.components.equippable:SetOnEquip( OnEquip ) -- 设定物品在装备和卸下时执行的函数。在前面定义的两个函数是OnEquip，OnUnequip里，我们主要是围绕着改变人物外形设定了一些基本代码。 在装上的时候，会让人物的持物手显示出来，普通手隐藏，卸下时则反过来。需要注意的是，OnEquip，OnUnequip都是本地函数，要想让它们发挥作用，就必须要通过这里的组件接口来实现。
@@ -54,11 +54,13 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
 	inst:AddComponent("weapon")     
     inst.components.weapon:SetDamage(10)--设置武器的攻击力damage
     inst.components.weapon:SetOnAttack(onattack)
-    inst.components.equippable.walkspeedmult = 1.5--设置持有时的移动速度
+    inst.components.equippable.walkspeedmult = 2.5 --设置持有时的移动速度
 	
+	-- 攻击范围
+	-- inst.components.combat:SetAreaDamage(6,1)
 	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
-	inst.components.finiteuses:SetMaxUses(150)--设置最大耐久MaxUse
-    inst.components.finiteuses:SetUses(150)--设置当前耐久CanUse
+	inst.components.finiteuses:SetMaxUses(1500)--设置最大耐久MaxUse
+    inst.components.finiteuses:SetUses(1500)--设置当前耐久CanUse
     inst:AddComponent("tool")--添加工具功能
     inst.components.tool:SetAction(ACTIONS.MINE, 2) --可以挖矿
     inst.components.tool:SetAction(ACTIONS.DIG,2) --可以挖掘
@@ -70,7 +72,10 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
 
     return inst
 end
-STRINGS.NAMES.ROCK_SHOVEL = "无形"
-STRINGS.RECIPE_DESC.ROCK_SHOVEL = "无形之刃，最为致命" 
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.ROCK_SHOVEL = "允许你先跑39米"
-return Prefab("common/inventory/rock_shovel", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。
+--STRINGS.NAMES.ROCK_SHOVEL = "无形"
+--STRINGS.RECIPE_DESC.ROCK_SHOVEL = "无形之刃，最为致命" 
+--STRINGS.CHARACTERS.GENERIC.DESCRIBE.ROCK_SHOVEL = "允许你先跑39米"
+STRINGS.NAMES.STEALTH_DACHI = "无形-beta"
+STRINGS.RECIPE_DESC.STEALTH_DACHI = "无形之刃，最为致命" 
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.STEALTH_DACHI = "允许你先跑39米"
+return Prefab("common/inventory/stealth_dachi", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。
