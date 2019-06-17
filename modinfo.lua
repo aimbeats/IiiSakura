@@ -1,6 +1,6 @@
-name = "Yaezakura"
+name = "IiiSkura"
 description = "我想守护的人都已不在"
-author = "kongxiang"
+author = "hongjiu"
 version = "1.0"
 forumthread = ""
 

@@ -1,40 +1,40 @@
 --预制件的列表，所有东西都要在这里注册
 PrefabFiles = {
-"yaezakura",--八重樱
+"iiisakura",--三世樱
 -- "fox_mask"--狐狸面具
 -- "rock_dachi",--石刀
 -- "stealth_dachi",--无形
 -- "dawn_dachi",--破晓
 -- "nightmare_dachi",--梦魇
-"thorne_dachi",--荆棘
+-- "thorne_dachi",--荆棘
 -- "demon_blade",--妖刀·千盏繁华
-"rock_shovel",--多功能石铲
+-- "rock_shovel",--多功能石铲
 -- "gold_shovel",--多功能金铲
 -- "tm_shovel"--多功能铥铲
 }
 --这里存放该mod所需要的所有动画文件和图片，需要把所有的图片和xml文件存放在这里
 Assets = {
 	--还不知道是什么图
-	Asset( "IMAGE", "images/saveslot_portraits/yaezakura.tex" ),
-    Asset( "ATLAS", "images/saveslot_portraits/yaezakura.xml" ),
+	Asset( "IMAGE", "images/saveslot_portraits/iiisakura.tex" ),
+    Asset( "ATLAS", "images/saveslot_portraits/iiisakura.xml" ),
 	--选择人物时的肖像	
-	Asset( "IMAGE", "images/selectscreen_portraits/yaezakura.tex" ),
-	Asset( "ATLAS", "images/selectscreen_portraits/yaezakura.xml" ),
+	Asset( "IMAGE", "images/selectscreen_portraits/iiisakura.tex" ),
+	Asset( "ATLAS", "images/selectscreen_portraits/iiisakura.xml" ),
 	--“silho”文件只是锁定角色时所选择的屏幕图像的一幅被涂黑的图像
-	Asset( "IMAGE", "images/selectscreen_portraits/yaezakura_silho.tex" ),
-	Asset( "ATLAS", "images/selectscreen_portraits/yaezakura_silho.xml" ),
+	Asset( "IMAGE", "images/selectscreen_portraits/iiisakura_silho.tex" ),
+	Asset( "ATLAS", "images/selectscreen_portraits/iiisakura_silho.xml" ),
 	--人物大图
-	Asset( "IMAGE", "bigportraits/yaezakura.tex" ),
-	Asset( "ATLAS", "bigportraits/yaezakura.xml" ),
+	Asset( "IMAGE", "bigportraits/iiisakura.tex" ),
+	Asset( "ATLAS", "bigportraits/iiisakura.xml" ),
 	--自定义的小地图图标
-	Asset( "IMAGE", "images/map_icons/yaezakura.tex" ),
-	Asset( "ATLAS", "images/map_icons/yaezakura.xml" ),
+	Asset( "IMAGE", "images/map_icons/iiisakura.tex" ),
+	Asset( "ATLAS", "images/map_icons/iiisakura.xml" ),
 	--化身？
-	Asset( "IMAGE", "images/avatars/avatar_yaezakura.tex" ),
-    Asset( "ATLAS", "images/avatars/avatar_yaezakura.xml" ),
+	Asset( "IMAGE", "images/avatars/avatar_iiisakura.tex" ),
+    Asset( "ATLAS", "images/avatars/avatar_iiisakura.xml" ),
 	--幽灵形态
-	Asset( "IMAGE", "images/avatars/avatar_ghost_yaezakura.tex" ),
-	Asset( "ATLAS", "images/avatars/avatar_ghost_yaezakura.xml" ),
+	Asset( "IMAGE", "images/avatars/avatar_ghost_iiisakura.tex" ),
+	Asset( "ATLAS", "images/avatars/avatar_ghost_iiisakura.xml" ),
 	--库存图片
 	--狐狸面具
 	Asset( "IMAGE", "images/inventoryimages/fox_mask.tex" ),
@@ -85,9 +85,9 @@ TUNING.skillKey = GetModConfigData('skillKey')
 TUNING.checkKey = GetModConfigData('checkKey')
 
 --这里告诉游戏添加小地图图标
-AddMinimapAtlas("images/map_icons/yaezakura.xml")
+AddMinimapAtlas("images/map_icons/iiisakura.xml")
 --加载台词
-STRINGS.CHARACTERS.TSUI_RABBIT = require "speech_yaezakura"
+STRINGS.CHARACTERS.TSUI_RABBIT = require "speech_iiisakura"
 --制作物品时的配方和图片
 -- 第一个参数，prefab的名字。
 -- 第二个参数，配方表，用{}框起来，里面每一项配方用一个Ingredient。Ingredient的第一个参数是具体的prefab名，第二个是数量
@@ -152,4 +152,4 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.MARISA =
 	GHOST = "巫女也需要救赎",
 }
 --这将为游戏添加你的角色
-AddModCharacter("yaezakura","FEMALE")
+AddModCharacter("iiisakura","FEMALE")

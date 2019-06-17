@@ -28,7 +28,7 @@ local sakura_handlers = {}
 AddPlayerPostInit(function(inst)
 	inst:DoTaskInTime(0, function()
 		if inst == GLOBAL.ThePlayer then
-			if inst.prefab == "yaezakura" then
+			if inst.prefab == "iiisakura" then
 				sakura_handlers[0] = TheInput:AddKeyDownHandler(TUNING.checkKey, function()
 					local screen = GLOBAL.TheFrontEnd:GetActiveScreen()
             		local IsHUDActive = screen and screen.name == "HUD"
