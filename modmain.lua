@@ -6,9 +6,9 @@ PrefabFiles = {
  "stealth_dachi",--无形
 -- "dawn_dachi",--破晓
 -- "nightmare_dachi",--梦魇
--- "thorne_dachi",--荆棘
+"thorne_dachi",--荆棘
 -- "demon_blade",--妖刀·千盏繁华
--- "rock_shovel",--多功能石铲
+"rock_shovel",--多功能石铲
 -- "gold_shovel",--多功能金铲
 -- "tm_shovel"--多功能铥铲
 }
