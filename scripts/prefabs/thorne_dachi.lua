@@ -14,15 +14,11 @@ local function OnEquip(inst, owner) --当你把武器装备到手上时，会触
     owner.AnimState:OverrideSymbol("swap_object", "swap_rock_shovel", "swap_rock_shovel")--这句话的含义是，用swap_myitem_build这个文件里的swap_myitem这个symbol，覆盖人物的swap_object这个symbol。swap_object，是人物身上的一个symbol，swap_myitem_build，则是我们之前准备好的，用于手持武器的build，swap_myitem就是存放手持武器的图片的文件夹的名字，mod tools自动把它输出为一个symbol。
     owner.AnimState:Show("ARM_carry") --显示持物手
     owner.AnimState:Hide("ARM_normal") --隐藏普通的手
-    --每秒扣血
-	-- inst.components.health:StartRegen(1, -1)
 end
 
 local function OnUnequip(inst, owner) 
     owner.AnimState:Hide("ARM_carry") --隐藏持物手
     owner.AnimState:Show("ARM_normal") --显示普通的手
-    --自动回血
-	-- inst.components.health:StartRegen(1, 2)
 end
 
 local function onattack(inst, attacker, target)
@@ -31,6 +27,9 @@ end
 
 local function onfinished(inst) -- 耐久用光时
 	inst:Remove()
+    local dawn = SpawnPrefab("dawn_dachi")
+    local x, y, z = inst.Transform:GetWorldPosition()
+    dawn.Transform:SetPosition(x, y, z)--在脚下生成破晓武器
 end
 
 local function fn()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
@@ -61,7 +60,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.components.equippable:SetOnUnequip( OnUnequip )
 	
 	inst:AddComponent("weapon")     
-    inst.components.weapon:SetDamage(50)--设置武器的攻击力damage
+    inst.components.weapon:SetDamage(30)--设置武器的攻击力damage
     inst.components.equippable.walkspeedmult = 1--设置持有时的移动速度
 
     local function onattack(weapon, attacker, target)
@@ -71,22 +70,16 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
                 attacker.components.health:DoDelta(-1)
             end
         end
-        --攻击回精神
-        if attacker then
-            if attacker.components.sanity then
-                attacker.components.sanity:DoDelta(1)
-            end
-        end
     end
     inst.components.weapon:SetOnAttack(onattack)
 	
 	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
 	inst.components.finiteuses:SetMaxUses(500)--设置最大耐久MaxUse
-	inst.components.finiteuses:SetUses(500)--设置当前耐久CanUse
+	inst.components.finiteuses:SetUses(1)--设置当前耐久CanUse
 	if inst.components.finiteuses.current < 0 then
        inst.components.finiteuses.current = 0
     end
-	inst.components.finiteuses:SetOnFinished(inst.Remove)
+	inst.components.finiteuses:SetOnFinished(onfinished)
 
     return inst
 end

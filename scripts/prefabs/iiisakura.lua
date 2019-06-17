@@ -10,8 +10,8 @@ local prefabs = {}
 
 --人物出生自带的物品
 local start_inv = {
-	-- "thorne_dachi",
-	-- "rock_shovel",
+	"thorne_dachi",
+	"rock_shovel",
 	-- "fox_mask"
 }
 
@@ -211,7 +211,7 @@ local function skill(inst)
 	if not inst:HasTag("cd_skill") then
 		inst:AddTag("cd_skill")--赋上大招状态标签
 		inst.components.talker:Say("瞬剑")
-		inst:StopBrain()--人物停止
+		inst.brain.Stop()--人物停止
 		--inst.AnimState:PlayAnimation("crash")--加载起手动画
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 3)
@@ -221,6 +221,7 @@ local function skill(inst)
 			--没有用？
 			if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
 				v.components.locomotor:Stop()
+				-- v.brain.Stop()
 			end
 		end
 		--3秒后开始攻击
@@ -243,10 +244,11 @@ local function skill(inst)
 			end)
 		end)
 	else 
-		inst.components.talker:Say("结束大招")
-		inst:RestartBrain()
 		inst.movetask:Cancel()
 		inst.movetask = nil
+		inst.components.talker:Say("结束大招")
+		inst.brain.Start()--人物恢复行动
+		-- inst:RestartBrain()
 		inst:RemoveTag("cd_skill")
 	end
 end
@@ -289,6 +291,17 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("dodge", dodge)
 	inst:ListenForEvent("topspeed", topspeed)
 	inst:ListenForEvent("skill", skill)
+	-- 理智光环
+	-- inst.components.edible.sanityvalue = 2
+	inst:DoPeriodicTask(2,function() 
+		local pos = Vector3(inst.Transform:GetWorldPosition())
+		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 8)
+		for k,v in pairs(ents) do
+			if  v.components.sanity then              
+				v.components.sanity:DoDelta(1) 
+			end
+		end
+	end)
 	-- local Combat = Class(function(self, inst)
 	-- 	--攻击距离
 	-- 	inst.components.combat.attackrange = 8
