@@ -20,12 +20,14 @@ local function OnUnequip(inst, owner)
     owner.AnimState:Show("ARM_normal") --显示普通的手
 end
 
+
+--人物攻击
 local function onattack(inst, attacker, target)
-	print("使用无影剑攻击")
 	attacker.SoundEmitter:PlaySound("spells/sound/sweep")
 end
 
-local function init()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
+--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
+local function init()
     local inst = CreateEntity()
 	
     inst.entity:AddTransform()
@@ -77,9 +79,6 @@ local function init()--这个函数就是实际创建物体的函数，上面所
 
     return inst
 end
---STRINGS.NAMES.ROCK_SHOVEL = "无形"
---STRINGS.RECIPE_DESC.ROCK_SHOVEL = "无形之刃，最为致命" 
---STRINGS.CHARACTERS.GENERIC.DESCRIBE.ROCK_SHOVEL = "允许你先跑39米"
 STRINGS.NAMES.STEALTH_DACHI = "无影剑"
 STRINGS.RECIPE_DESC.STEALTH_DACHI = "无形之刃，最为致命" 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.STEALTH_DACHI = "允许你先跑39米"
