@@ -10,13 +10,15 @@ local prefabs = {}
 
 --人物出生自带的物品
 local start_inv = {
-	"thorne_dachi",
-	"rock_shovel",
+	--"thorne_dachi",
+	--"rock_shovel",
+	"stealth_dachi",
 	-- "fox_mask"
 }
+	print("加载无影剑")
 
 --这将为服务器和客户机初始化。标签可以在这里添加。
-local common_postinit = function(inst) 
+local common_postinit = function(inst)
 	-- 小地图图标
 	inst.MiniMapEntity:SetIcon( "iiisakura.tex" )
 	inst:AddTag("iiisakura")
@@ -24,7 +26,7 @@ local common_postinit = function(inst)
 	inst:AddTag("iiisakura_builder")
 end
 --定义八重樱能力倍率变量
-local statedata = 
+local statedata =
 {
 	normal = {
 		multiplier = 1,
@@ -139,7 +141,7 @@ local function windPressure(inst)
 		local result_offset = FindValidPositionByFan(math.random()*2*PI, 10, 75, function(offset)
 					local x,y,z = (pos + offset):Get()
 					local ents = TheSim:FindEntities(x,y,z , 1)
-					return not next(ents) 
+					return not next(ents)
 		end)
 		--检测人物范围内所有物体
 		for k,v in pairs(ents) do
@@ -179,10 +181,10 @@ local function dodge(inst)
 				inst:RemoveEventCallback("attacked",getAttack)--移除监听器。
 			end
 		end)
-	else 
+	else
 		inst.components.talker:Say("雾鸦技能冷却中")
 	end
-	
+
 end
 --主动技能C：雷动
 local function topspeed(inst)
@@ -197,7 +199,7 @@ local function topspeed(inst)
 		inst.movetask = inst:DoPeriodicTask(1, function(inst)
 			inst.components.hunger:DoDelta(-1)
 		end)
-	else 
+	else
 		inst.components.talker:Say("雷动状态已解除")
 		inst:RemoveTag("topspeed")--移除雷动状态标签
 		onsanitychange(inst)
@@ -243,7 +245,9 @@ local function skill(inst)
 				end
 			end)
 		end)
-	else 
+	else
+		inst.components.talker:Say("结束大招")
+		inst:RestartBrain()
 		inst.movetask:Cancel()
 		inst.movetask = nil
 		inst.components.talker:Say("结束大招")
@@ -312,7 +316,7 @@ local master_postinit = function(inst)
 	-- 	--科技水平
 	-- 	inst.components.builder.science_bonus = 1
     -- end)
-	
+
 end
 
 STRINGS.CHARACTER_TITLES.iiisakura = "八重樱"
