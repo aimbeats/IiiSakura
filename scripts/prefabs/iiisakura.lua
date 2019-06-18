@@ -10,12 +10,14 @@ local prefabs = {}
 
 --人物出生自带的物品
 local start_inv = {
-	--"thorne_dachi",
-	--"rock_shovel",
-	"stealth_dachi",
+	"thorne_dachi",
+	"rock_shovel",
+	-- "stealth_dachi",
+	"cutgrass",
+	"laser_pointer"
 	-- "fox_mask"
 }
-	print("加载无影剑")
+	-- print("加载无影剑")
 
 --这将为服务器和客户机初始化。标签可以在这里添加。
 local common_postinit = function(inst)
@@ -197,7 +199,7 @@ local function topspeed(inst)
 		inst.components.locomotor.walkspeed = 8
 		inst.components.locomotor.runspeed = 10
 		inst.movetask = inst:DoPeriodicTask(1, function(inst)
-			inst.components.hunger:DoDelta(-1)
+			inst.components.hunger:DoDelta(-2)
 		end)
 	else
 		inst.components.talker:Say("雷动状态已解除")
@@ -210,8 +212,8 @@ local function topspeed(inst)
 end
 --主动技能V：瞬剑·繁华落尽
 local function skill(inst)
-	if not inst:HasTag("cd_skill") then
-		inst:AddTag("cd_skill")--赋上大招状态标签
+	if not inst:HasTag("cd_heat") then
+		inst:AddTag("cd_heat")--赋上大招状态标签
 		inst.components.talker:Say("瞬剑")
 		inst.brain.Stop()--人物停止
 		--inst.AnimState:PlayAnimation("crash")--加载起手动画
@@ -226,11 +228,12 @@ local function skill(inst)
 				-- v.brain.Stop()
 			end
 		end
-		--3秒后开始攻击
+		--1秒后开始攻击
 		inst:DoTaskInTime(1,function(inst)
 			--inst.AnimState:PlayAnimation("crash")--加载爆发时的动画
 			inst.components.talker:Say("繁华落尽")
-			inst.movetask = inst:DoPeriodicTask(2, function(inst)--每0.5秒对敌人造成50伤害
+			inst:AddTag("cd_skill")
+			inst.movetask = inst:DoPeriodicTask(2, function(inst)--每2秒对敌人造成50伤害
 				inst.components.hunger:DoDelta(-20)
 				inst.components.health:DoDelta(-20)
 				inst.components.sanity:DoDelta(-20)
@@ -246,14 +249,15 @@ local function skill(inst)
 			end)
 		end)
 	else
-		inst.components.talker:Say("结束大招")
-		inst:RestartBrain()
-		inst.movetask:Cancel()
-		inst.movetask = nil
-		inst.components.talker:Say("结束大招")
-		inst.brain.Start()--人物恢复行动
+		if not inst:HasTag("cd_skill") then
+			inst.movetask:Cancel()
+			inst.movetask = nil
+			inst:RemoveTag("cd_skill")
+		end
+		inst.components.talker:Say("结束")
 		-- inst:RestartBrain()
-		inst:RemoveTag("cd_skill")
+		inst.brain.Start()--人物恢复行动
+		inst:RemoveTag("cd_heat")
 	end
 end
 --下面是人物的属性值
@@ -314,7 +318,7 @@ local master_postinit = function(inst)
 	-- 	--攻击频率
 	-- 	inst.components.combat.min_attack_period = 4
 	-- 	--科技水平
-	-- 	inst.components.builder.science_bonus = 1
+	inst.components.builder.science_bonus = 1
     -- end)
 
 end

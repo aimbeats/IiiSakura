@@ -11,6 +11,10 @@ PrefabFiles = {
 "rock_shovel",--多功能石铲
 -- "gold_shovel",--多功能金铲
 -- "tm_shovel"--多功能铥铲
+"nuclear_silo",--核弹发射井
+-- "nuclear_bomb",--蘑菇弹
+"laser_pointer",--激光指示器
+"hit_marks",--锁定打击
 }
 --这里存放该mod所需要的所有动画文件和图片，需要把所有的图片和xml文件存放在这里
 Assets = {
@@ -66,9 +70,15 @@ Assets = {
 	--多功能铥铲
 	Asset( "IMAGE", "images/inventoryimages/tm_shovel.tex" ),
 	Asset( "ATLAS", "images/inventoryimages/tm_shovel.xml" ),
-	--核弹发射井(蘑菇弹)
-	--Asset( "IMAGE", "images/inventoryimages/sakurasnow.tex" ),
-	--Asset( "ATLAS", "images/inventoryimages/sakurasnow.xml" ),
+	--核弹发射井
+	Asset( "IMAGE", "images/inventoryimages/nuclear_silo.tex" ),
+	Asset( "ATLAS", "images/inventoryimages/nuclear_silo.xml" ),
+	--蘑菇弹
+	Asset( "IMAGE", "images/inventoryimages/nuclear_bomb.tex" ),
+	Asset( "ATLAS", "images/inventoryimages/nuclear_bomb.xml" ),
+	--激光指示器
+	Asset( "IMAGE", "images/inventoryimages/laser_pointer.tex" ),
+	Asset( "ATLAS", "images/inventoryimages/laser_pointer.xml" ),
 }
 
 local require = GLOBAL.require
@@ -141,6 +151,21 @@ local marisatab = AddRecipeTab( "Marisa's Tab", 514, "images/hud/marisatab.xml",
 -- {Ingredient("thulecite", 1),Ingredient("twigs", 10)}, RECIPETABS.WAR,
 -- TECH.NONE, nil, nil, nil, nil, nil,
 -- "images/inventoryimages/tm_shovel.xml", "tm_shovel.tex" )
+--核弹发射井：石砖*20、电子元件*10、火药*5
+AddRecipe("nuclear_silo",
+{Ingredient("petals", 1)}, RECIPETABS.TOWN,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/nuclear_silo.xml", "nuclear_silo.tex" )
+--蘑菇弹：红蓝绿蘑菇*20
+AddRecipe("nuclear_bomb",
+{Ingredient("petals", 1)}, RECIPETABS.TOWN,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/nuclear_bomb.xml", "nuclear_bomb.tex" )
+--激光指示器：燧石*1、电器元件*1
+AddRecipe("laser_pointer",
+{Ingredient("petals", 1)}, RECIPETABS.TOWN,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/laser_pointer.xml", "laser_pointer.tex" )
 
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.MARISA =

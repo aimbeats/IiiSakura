@@ -1,5 +1,5 @@
 --***************************************************************
---多功能石铲
+--激光指示器
 --***********************************************************************
 local assets=
 { 
@@ -25,6 +25,14 @@ local function onattack(inst, attacker, target)
 	attacker.SoundEmitter:PlaySound("spells/sound/sweep")
 end
 
+local function fusionBlow(inst, target, pos)
+    local caster = inst.components.inventoryitem.owner
+    -- local pos = target.Transform:GetWorldPosition()
+    TheNet:Announce("警告！侦测到在途的聚变打击！")
+    SpawnPrefab("hit_marks").Transform:SetPosition(pos.x,pos.y,pos.z)
+    -- SpawnPrefab("master").Transform:SetPosition()
+end
+
 local function fn()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
     local inst = CreateEntity()
 	
@@ -34,8 +42,8 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
      
     MakeInventoryPhysics(inst)   
       
-    inst.AnimState:SetBank("rock_shovel")
-    inst.AnimState:SetBuild("rock_shovel")
+    inst.AnimState:SetBank("laser_pointer")
+    inst.AnimState:SetBuild("laser_pointer")
     inst.AnimState:PlayAnimation("idle")
 
 	if not TheWorld.ismastersim then
@@ -45,33 +53,20 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.entity:SetPristine()
 
     inst:AddComponent("inventoryitem")--添加物品栏物品组件，只有有了这个组件，你才能把这个物品捡起放到物品栏里。
-    inst.components.inventoryitem.imagename = "rock_shovel" --物品栏图片的名字
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/rock_shovel.xml"--物品栏图片的xml文件。为什么会有这么两句呢？在单个文件下也许会迷惑，但如果换成一个张大图就容易理解了。举个例子，游戏的操作界面,HUD，你可以在data\images下找到HUD.tex，用textool打开就会看到是一整张大的图片，包含了整个操作界面的所有图片，xml就是用来切割分块这张大的图片，并分别给它们重新命名的，新的命名就会被前面的imagename 使用。
+    inst.components.inventoryitem.imagename = "laser_pointer" --物品栏图片的名字
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/laser_pointer.xml"--物品栏图片的xml文件。为什么会有这么两句呢？在单个文件下也许会迷惑，但如果换成一个张大图就容易理解了。举个例子，游戏的操作界面,HUD，你可以在data\images下找到HUD.tex，用textool打开就会看到是一整张大的图片，包含了整个操作界面的所有图片，xml就是用来切割分块这张大的图片，并分别给它们重新命名的，新的命名就会被前面的imagename 使用。
 
     inst:AddComponent("equippable")--添加可装备组件，有了这个组件，你才能装备物品
     inst.components.equippable:SetOnEquip( OnEquip ) -- 设定物品在装备和卸下时执行的函数。在前面定义的两个函数是OnEquip，OnUnequip里，我们主要是围绕着改变人物外形设定了一些基本代码。 在装上的时候，会让人物的持物手显示出来，普通手隐藏，卸下时则反过来。需要注意的是，OnEquip，OnUnequip都是本地函数，要想让它们发挥作用，就必须要通过这里的组件接口来实现。
     inst.components.equippable:SetOnUnequip( OnUnequip )
-	
-	inst:AddComponent("weapon")     
-    inst.components.weapon:SetDamage(10)--设置武器的攻击力damage
-    inst.components.weapon:SetOnAttack(onattack)
-    inst.components.equippable.walkspeedmult = 1.7--设置持有时的移动速度倍率
-	
-	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
-	inst.components.finiteuses:SetMaxUses(150)--设置最大耐久MaxUse
-    inst.components.finiteuses:SetUses(150)--设置当前耐久CanUse
-    inst:AddComponent("tool")--添加工具功能
-    inst.components.tool:SetAction(ACTIONS.MINE, 2) --可以挖矿
-    inst.components.tool:SetAction(ACTIONS.DIG,1) --可以挖掘
-    inst.components.tool:SetAction(ACTIONS.CHOP,1) --可以砍树
-	if inst.components.finiteuses.current < 0 then
-       inst.components.finiteuses.current = 0
-    end
-	inst.components.finiteuses:SetOnFinished(inst.Remove)
-
+    
+    inst:AddComponent("spellcaster")
+	inst.components.spellcaster:SetSpellFn(fusionBlow)
+    inst.components.spellcaster.canuseonpoint = true
+    
     return inst
 end
-STRINGS.NAMES.ROCK_SHOVEL = "多功能石铲"
-STRINGS.RECIPE_DESC.ROCK_SHOVEL = "一铲在手天下我有" 
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.ROCK_SHOVEL = "也许我能客串一下某个骑士？"
-return Prefab("common/inventory/rock_shovel", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。
+STRINGS.NAMES.LASER_POINTER = "激光指示器"
+STRINGS.RECIPE_DESC.LASER_POINTER = "锁定打击目标" 
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.LASER_POINTER = "据说是给什么定位用的"
+return Prefab("common/inventory/laser_pointer", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。
