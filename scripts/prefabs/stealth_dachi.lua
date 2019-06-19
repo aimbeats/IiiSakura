@@ -20,11 +20,14 @@ local function OnUnequip(inst, owner)
     owner.AnimState:Show("ARM_normal") --显示普通的手
 end
 
+
+--人物攻击
 local function onattack(inst, attacker, target)
 	attacker.SoundEmitter:PlaySound("spells/sound/sweep")
 end
 
-local function fn()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
+--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
+local function init()
     local inst = CreateEntity()
 	
     inst.entity:AddTransform()
@@ -50,20 +53,24 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst:AddComponent("equippable")--添加可装备组件，有了这个组件，你才能装备物品
     inst.components.equippable:SetOnEquip( OnEquip ) -- 设定物品在装备和卸下时执行的函数。在前面定义的两个函数是OnEquip，OnUnequip里，我们主要是围绕着改变人物外形设定了一些基本代码。 在装上的时候，会让人物的持物手显示出来，普通手隐藏，卸下时则反过来。需要注意的是，OnEquip，OnUnequip都是本地函数，要想让它们发挥作用，就必须要通过这里的组件接口来实现。
     inst.components.equippable:SetOnUnequip( OnUnequip )
+	--持有时的移速为80%（刀太长太重了）
+    inst.components.equippable.walkspeedmult = 0.8
 	
-	inst:AddComponent("weapon")     
-    inst.components.weapon:SetDamage(10)--设置武器的攻击力damage
+	--添加武器组件
+	inst:AddComponent("weapon")
+	--武器攻击力
+    inst.components.weapon:SetDamage(20)
+	--攻击范围
+	inst.components.weapon:SetRange(20)
     inst.components.weapon:SetOnAttack(onattack)
-    inst.components.equippable.walkspeedmult = 2.5 --设置持有时的移动速度
 	
-	-- 攻击范围
-	-- inst.components.combat:SetAreaDamage(6,1)
 	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
-	inst.components.finiteuses:SetMaxUses(1500)--设置最大耐久MaxUse
-    inst.components.finiteuses:SetUses(1500)--设置当前耐久CanUse
-    inst:AddComponent("tool")--添加工具功能
-    inst.components.tool:SetAction(ACTIONS.MINE, 2) --可以挖矿
-    inst.components.tool:SetAction(ACTIONS.DIG,2) --可以挖掘
+	inst.components.finiteuses:SetMaxUses(200)--设置最大耐久MaxUse
+    inst.components.finiteuses:SetUses(200)--设置当前耐久CanUse
+	
+    --inst:AddComponent("tool")--添加工具功能
+    --inst.components.tool:SetAction(ACTIONS.MINE, 2) --可以挖矿
+    --inst.components.tool:SetAction(ACTIONS.DIG,2) --可以挖掘
     --inst.components.tool:SetAction(ACTIONS.chop,1) --可以砍树,会出现bug,先注释
 	if inst.components.finiteuses.current < 0 then
        inst.components.finiteuses.current = 0
@@ -72,10 +79,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
 
     return inst
 end
---STRINGS.NAMES.ROCK_SHOVEL = "无形"
---STRINGS.RECIPE_DESC.ROCK_SHOVEL = "无形之刃，最为致命" 
---STRINGS.CHARACTERS.GENERIC.DESCRIBE.ROCK_SHOVEL = "允许你先跑39米"
-STRINGS.NAMES.STEALTH_DACHI = "无形-beta"
+STRINGS.NAMES.STEALTH_DACHI = "无影剑"
 STRINGS.RECIPE_DESC.STEALTH_DACHI = "无形之刃，最为致命" 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.STEALTH_DACHI = "允许你先跑39米"
-return Prefab("common/inventory/stealth_dachi", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。
+return Prefab("common/inventory/stealth_dachi", init, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，init则是上面定义的init，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。

@@ -12,7 +12,7 @@ local prefabs = {}
 local start_inv = {
 	"thorne_dachi",
 	"rock_shovel",
-	-- "stealth_dachi",
+	"stealth_dachi",
 	"cutgrass",
 	"laser_pointer"
 	-- "fox_mask"

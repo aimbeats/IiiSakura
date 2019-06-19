@@ -3,7 +3,7 @@ PrefabFiles = {
 "iiisakura",--三世樱
 "fox_mask",--狐狸面具
 -- "rock_dachi",--石刀
-"stealth_dachi",--无形
+"stealth_dachi",--无影剑
 "dawn_dachi",--破晓
 -- "nightmare_dachi",--梦魇
 "thorne_dachi",--荆棘
