@@ -1,7 +1,7 @@
 --预制件的列表，所有东西都要在这里注册
 PrefabFiles = {
 "iiisakura",--三世樱
--- "fox_mask"--狐狸面具
+"fox_mask",--狐狸面具
 -- "rock_dachi",--石刀
 "stealth_dachi",--无形
 "dawn_dachi",--破晓
@@ -106,6 +106,11 @@ STRINGS.CHARACTERS.TSUI_RABBIT = require "speech_iiisakura"
 -- 后续5个参数都是nil，表明不需要这些参数，但需要占位置
 -- 最后一个参数，指明图片文档地址，用于制作栏显示图片。
 local marisatab = AddRecipeTab( "Marisa's Tab", 514, "images/hud/marisatab.xml", "marisatab.tex", "marisa_builder")
+--狐狸面具：干草*5,、绳子*1、花瓣*5
+AddRecipe("fox_mask",
+{Ingredient("cutgrass", 1)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
 -- --狐狸面具：干草*5,、绳子*1、花瓣*5
 -- AddRecipe("fox_mask",
 -- {Ingredient("cutgrass", 5),Ingredient("rope", 1),Ingredient("petals", 5)}, RECIPETABS.WAR,
