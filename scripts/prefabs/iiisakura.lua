@@ -119,10 +119,7 @@ local function getAttack(inst,data)
 			local x, y, z = inst.Transform:GetWorldPosition()--获取主角的位置
 			inst.Transform:SetPosition(x+math.random(-10, 10),y+math.random(-10, 10),z+math.random(-10, 10)) --随机转移
 			local pos = attacker:GetPosition()
-			-- GetSeasonManager():DoLightningStrike(pos)
-			-- Sleep(0.3)
-			-- attacker.AnimState:SetMultColour(125/255,125/255,125/255,1)
-    	SpawnPrefab("lightning_rod_fx").Transform:SetPosition(attacker.Transform:GetWorldPosition())--加载闪电动画
+    		SpawnPrefab("lightning_rod_fx").Transform:SetPosition(attacker.Transform:GetWorldPosition())--加载闪电动画
 			attacker.components.combat:GetAttacked(inst,50,nil) --对攻击者反伤50
 			inst:RemoveTag("dodge") --移除闪避状态标签
 			inst:DoTaskInTime( 5, function() inst:RemoveTag("cd_dodge") end)--5秒后移除技能冷却标签。
@@ -214,20 +211,27 @@ end
 local function skill(inst)
 	if not inst:HasTag("cd_heat") then
 		inst:AddTag("cd_heat")--赋上大招状态标签
+		
 		inst.components.talker:Say("瞬剑")
-		inst.brain.Stop()--人物停止
+		inst.components.locomotor:Stop()
 		--inst.AnimState:PlayAnimation("crash")--加载起手动画
-		local pos = Vector3(inst.Transform:GetWorldPosition())
-		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 3)
-		--检测人物范围内所有物体
-		for k,v in pairs(ents) do
-			--让范围内敌人停止移动
-			--没有用？
-			if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
-				v.components.locomotor:Stop()
-				-- v.brain.Stop()
-			end
-		end
+		-- inst:ListenForEvent("locomote",iswalk)
+		-- local pos = Vector3(inst.Transform:GetWorldPosition())
+		-- local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 3)
+		-- --检测人物范围内所有物体
+		-- for k,v in pairs(ents) do
+		-- 	--让范围内敌人停止移动
+		-- 	--没有用？
+		-- 	if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
+		-- 		v.brain.Stop()
+		-- 		if v.components.locomotor then
+		-- 			v.components.locomotor:Stop()
+		-- 		end
+		-- 		v:DoTaskInTime(1, function()
+		-- 			v.brain:Start()
+		-- 		end)
+		-- 	end
+		-- end
 		--1秒后开始攻击
 		inst:DoTaskInTime(1,function(inst)
 			--inst.AnimState:PlayAnimation("crash")--加载爆发时的动画
@@ -241,10 +245,10 @@ local function skill(inst)
 				local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 10)
 				--检测人物范围内所有物体
 				for k,v in pairs(ents) do
-						if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
-							v.components.combat:GetAttacked(inst, 90)
-							inst.components.sanity:DoDelta(1) --用于抵消攻击时损失的精神值
-						end
+					if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
+						v.components.combat:GetAttacked(inst, 90)
+						inst.components.sanity:DoDelta(1) --用于抵消攻击时损失的精神值
+					end
 				end
 			end)
 		end)
@@ -255,10 +259,22 @@ local function skill(inst)
 			inst:RemoveTag("cd_skill")
 		end
 		inst.components.talker:Say("结束")
-		-- inst:RestartBrain()
-		inst.brain.Start()--人物恢复行动
 		inst:RemoveTag("cd_heat")
 	end
+	inst:ListenForEvent("locomote",--设置一个监听器监听是否在移动
+		function(inst, paused) 
+			if inst.components.locomotor.wantstomoveforward then
+				if not inst:HasTag("cd_skill") then
+					inst.movetask:Cancel()
+					inst.movetask = nil
+					inst:RemoveTag("cd_skill")
+				end
+				inst.components.talker:Say("结束")
+				inst:RemoveTag("cd_heat")
+				return
+			end
+		end 
+	)
 end
 --下面是人物的属性值
 local master_postinit = function(inst)

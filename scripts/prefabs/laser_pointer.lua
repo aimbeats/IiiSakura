@@ -28,6 +28,7 @@ end
 local function fusionBlow(inst, target, pos)
     local caster = inst.components.inventoryitem.owner
     -- local pos = target.Transform:GetWorldPosition()
+    caster.components.talker:Say("锁定打击目标", 2, false)
     TheNet:Announce("警告！侦测到在途的聚变打击！")
     SpawnPrefab("hit_marks").Transform:SetPosition(pos.x,pos.y,pos.z)
     -- SpawnPrefab("master").Transform:SetPosition()
