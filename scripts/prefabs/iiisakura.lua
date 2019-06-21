@@ -14,11 +14,9 @@ local start_inv = {
 	"rock_shovel",
 	"stealth_dachi",
 	"cutgrass",
-	"laser_pointer"
-	-- "fox_mask"
+	"laser_pointer",
+	"fox_mask"
 }
-	-- print("加载无影剑")
-
 --这将为服务器和客户机初始化。标签可以在这里添加。
 local common_postinit = function(inst)
 	-- 小地图图标
@@ -28,37 +26,41 @@ local common_postinit = function(inst)
 	inst:AddTag("iiisakura_builder")
 end
 --定义八重樱能力倍率变量
-local statedata =
+local ratedata =
 {
 	normal = {
-		multiplier = 1,
+		multiplier_normal = 1,
 			},
 	rage = {
-		multiplier = 1.5,
+		multiplier_normal = 1.5,
 			},
 	half_disintegration = {
-		multiplier = 2,
+		multiplier_normal = 2,
 			},
 	disintegration = {
-		multiplier = 3,
+		multiplier_normal = 3,
 			},
 }
+local statedata = 'disintegration'
 --根据理智状态修改对应的能力
-local function become(inst,state)
+local function onCapacity(inst,state)
 	inst.state = state
 	--攻击频率
-	-- inst.components.combat.min_attack_period = (4 * statedata[state].multiplier)
+	-- inst.components.combat.min_attack_period = (4 * rate[state].multiplier_normal)
 	--走路移动速度
-	inst.components.locomotor.walkspeed = (4 + statedata[state].multiplier)
+	inst.components.locomotor.walkspeed = (4 + ratedata[statedata].multiplier_normal)
 	--跑路移动速度
-	inst.components.locomotor.runspeed = (6 + statedata[state].multiplier)
+	inst.components.locomotor.runspeed = (6 + ratedata[statedata].multiplier_normal)
 	--饥饿速度
-	inst.components.hunger.hungerrate = (0.15 * statedata[state].multiplier)
+	inst.components.hunger.hungerrate = (0.15 * ratedata[statedata].multiplier_normal)
 	--增加所受伤害
-	inst.components.health:SetAbsorptionAmount(0.5 + statedata[state].multiplier * -1 / 2)
+	inst.components.health:SetAbsorptionAmount(0.5 + ratedata[statedata].multiplier_normal * -1 / 2)
 	--范围攻击
-	-- inst.components.combat.SetAreaDamage(0.5 + statedata[state].multiplier * -1 / 2)
-	--切换人物形态动画
+	-- inst.components.combat.SetAreaDamage(0.5 + rate[state].multiplier_normal * -1 / 2)
+end
+--根据理智状态切换人物形态动画
+local function onForm(inst,state)
+	inst.state = state
 	if state == "disintegration" then
 		inst.components.talker:Say("进入崩坏状态")
 		-- inst.AnimState:SetBuild("iiisakura_rage")
@@ -74,32 +76,40 @@ local function become(inst,state)
 	end
 end
 --判断理智范围触发能力修改的函数和标签
-local function onsanitychange(inst, data, forcesilent)
+local function onsanitychange(inst)
 	local percent = inst.components.sanity:GetPercent()
 	if percent < 0.1 and not inst:HasTag("disintegration") then
 		inst:AddTag("disintegration")
 		inst:RemoveTag("half_disintegration")
 		inst:RemoveTag("normal")
 		inst:RemoveTag("rage")
-		become(inst,"disintegration")
+		statedata = "disintegration"
+		onCapacity(inst,"disintegration")
+		onForm(inst,"disintegration")
 	elseif percent < 0.5 and percent > 0.25 and not inst:HasTag("half_disintegration") then
 		inst:AddTag("half_disintegration")
 		inst:RemoveTag("normal")
 		inst:RemoveTag("rage")
 		inst:RemoveTag("disintegration")
-		become(inst,"half_disintegration")
+		statedata = "half_disintegration"
+		onCapacity(inst,"half_disintegration")
+		onForm(inst,"half_disintegration")
 	elseif percent < 0.75 and percent > 0.5 and not inst:HasTag("rage") then
 		inst:AddTag("rage")
 		inst:RemoveTag("half_disintegration")
 		inst:RemoveTag("normal")
 		inst:RemoveTag("disintegration")
-		become(inst,"rage")
+		statedata = "rage"
+		onCapacity(inst,"rage")
+		onForm(inst,"rage")
 	elseif percent < 1 and percent > 0.75 and not inst:HasTag("normal") then
 		inst:AddTag("normal")
 		inst:RemoveTag("half_disintegration")
 		inst:RemoveTag("rage")
 		inst:RemoveTag("disintegration")
-		become(inst,"normal")
+		statedata = "normal"
+		onCapacity(inst,"normal")
+		onForm(inst,"normal")
 	else
 		return
   end
@@ -133,32 +143,27 @@ local function windPressure(inst)
 	if not inst:HasTag("cd_windPressure") then
 		inst.components.talker:Say("风压")
 		inst.components.hunger:DoDelta(-10)
-		-- inst.AnimState:Show("ARM_normal")--=未知动画
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 8)
-		--计算敌人击退位置
-		local result_offset = FindValidPositionByFan(math.random()*2*PI, 10, 75, function(offset)
-					local x,y,z = (pos + offset):Get()
-					local ents = TheSim:FindEntities(x,y,z , 1)
-					return not next(ents)
-		end)
 		--检测人物范围内所有物体
 		for k,v in pairs(ents) do
 				--破坏树木建筑
-				if v.components.workable and v.components.workable.workleft > 0 and not v.components.inventoryitem then
+				if v:HasTag("tree") and v.components.workable and v.components.workable.workleft > 0 then
 					v.components.workable:Destroy(inst)
 				end
 				--对敌人造成10伤害并击退
 				if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
-					v.components.combat:GetAttacked(inst, 10)
-					v.Transform:SetPosition((pos + result_offset):Get())
+					local pt01 = inst:GetPosition()
+					local pt02 = v:GetPosition()
+					v.Transform:SetPosition((pt02.x-pt01.x)*1.5+pt02.x, 0, (pt02.z-pt01.z)*1.5+pt02.z)
+				  	v.components.combat:GetAttacked(inst, 10)
 					inst.components.sanity:DoDelta(1) --用于抵消人物攻击时损失的精神值
 				end
 		end
 		--产生画面震动效果
 		inst:ShakeCamera(CAMERASHAKE.FULL, .7, .02, .3, inst, 40)
 		inst:AddTag("cd_windPressure")--赋上冷却状态标签
-		inst:DoTaskInTime( 5, function() inst:RemoveTag("cd_windPressure") end)--5秒后移除技能冷却标签。
+		inst:DoTaskInTime( 10, function() inst:RemoveTag("cd_windPressure") end)--10秒后移除技能冷却标签。
 	else
 		inst.components.talker:Say("风压技能冷却中")
 	end
@@ -183,7 +188,6 @@ local function dodge(inst)
 	else
 		inst.components.talker:Say("雾鸦技能冷却中")
 	end
-
 end
 --主动技能C：雷动
 local function topspeed(inst)
@@ -193,18 +197,29 @@ local function topspeed(inst)
 		inst.components.talker:Say("雷动已开启")
 		inst:AddTag("topspeed")--赋上雷动状态标签
 		--移动速度加快
-		inst.components.locomotor.walkspeed = 8
-		inst.components.locomotor.runspeed = 10
-		inst.movetask = inst:DoPeriodicTask(1, function(inst)
+		inst.components.locomotor.walkspeed = 10
+		inst.components.locomotor.runspeed = 12
+		inst.topspeed_delayed = inst:DoPeriodicTask(1, function(inst)
 			inst.components.hunger:DoDelta(-2)
 		end)
 	else
 		inst.components.talker:Say("雷动状态已解除")
 		inst:RemoveTag("topspeed")--移除雷动状态标签
-		onsanitychange(inst)
 		--走路移动速度
-		inst.movetask:Cancel()
-		inst.movetask = nil
+		inst.components.locomotor.walkspeed = (4 + ratedata[statedata].multiplier_normal)
+		--跑路移动速度
+		inst.components.locomotor.runspeed = (6 + ratedata[statedata].multiplier_normal)
+		--走路移动速度
+		inst.topspeed_delayed:Cancel()
+		inst.topspeed_delayed = nil
+	end
+end
+--瞬剑·繁华落尽监听是否移动
+local function iswalk(inst)
+	if inst.components.locomotor.wantstomoveforward then
+		inst:AddTag("cancel_skill")
+		inst:RemoveEventCallback("locomote",iswalk)--执行过一次之后，就移除监听器。
+		inst.components.talker:Say("移动打断大招")
 	end
 end
 --主动技能V：瞬剑·繁华落尽
@@ -215,68 +230,54 @@ local function skill(inst)
 		inst.components.talker:Say("瞬剑")
 		inst.components.locomotor:Stop()
 		--inst.AnimState:PlayAnimation("crash")--加载起手动画
-		-- inst:ListenForEvent("locomote",iswalk)
-		-- local pos = Vector3(inst.Transform:GetWorldPosition())
-		-- local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 3)
-		-- --检测人物范围内所有物体
-		-- for k,v in pairs(ents) do
-		-- 	--让范围内敌人停止移动
-		-- 	--没有用？
-		-- 	if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
-		-- 		v.brain.Stop()
-		-- 		if v.components.locomotor then
-		-- 			v.components.locomotor:Stop()
-		-- 		end
-		-- 		v:DoTaskInTime(1, function()
-		-- 			v.brain:Start()
-		-- 		end)
-		-- 	end
-		-- end
+		inst:ListenForEvent("locomote",iswalk)--设置一个监听器监听是否在移动。
 		--1秒后开始攻击
 		inst:DoTaskInTime(1,function(inst)
-			--inst.AnimState:PlayAnimation("crash")--加载爆发时的动画
 			inst.components.talker:Say("繁华落尽")
 			inst:AddTag("cd_skill")
-			inst.movetask = inst:DoPeriodicTask(2, function(inst)--每2秒对敌人造成50伤害
-				inst.components.hunger:DoDelta(-20)
-				inst.components.health:DoDelta(-20)
-				inst.components.sanity:DoDelta(-20)
-				local pos = Vector3(inst.Transform:GetWorldPosition())
-				local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 10)
-				--检测人物范围内所有物体
-				for k,v in pairs(ents) do
-					if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
-						v.components.combat:GetAttacked(inst, 90)
-						inst.components.sanity:DoDelta(1) --用于抵消攻击时损失的精神值
+			--inst.AnimState:PlayAnimation("crash")--加载爆发时的动画
+			inst.skill_delayed = inst:DoPeriodicTask(2, function(inst)--每2秒对敌人造成50伤害
+				if not inst:HasTag("cancel_skill") then
+					inst.components.hunger:DoDelta(-20)
+					inst.components.health:DoDelta(-20)
+					inst.components.sanity:DoDelta(-20)
+					local pos = Vector3(inst.Transform:GetWorldPosition())
+					local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 10)
+					--检测人物范围内所有物体
+					for k,v in pairs(ents) do
+						if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
+							v.components.combat:GetAttacked(inst, 90)
+							inst.components.sanity:DoDelta(1) --用于抵消攻击时损失的精神值
+						end
 					end
+				else 
+					if inst:HasTag("cd_skill") then
+						inst.skill_delayed:Cancel()
+						inst.skill_delayed = nil
+						inst:RemoveTag("cd_skill")
+					end
+					inst:RemoveTag("cancel_skill")
+					inst.components.talker:Say("结束")
+					inst:RemoveTag("cd_heat")
 				end
 			end)
 		end)
 	else
-		if not inst:HasTag("cd_skill") then
-			inst.movetask:Cancel()
-			inst.movetask = nil
+		if inst:HasTag("cd_skill") then
+			inst.skill_delayed:Cancel()
+			inst.skill_delayed = nil
 			inst:RemoveTag("cd_skill")
+		end
+		if inst:HasTag("cancel_skill") then
+			inst:RemoveTag("cancel_skill")
 		end
 		inst.components.talker:Say("结束")
 		inst:RemoveTag("cd_heat")
 	end
-	inst:ListenForEvent("locomote",--设置一个监听器监听是否在移动
-		function(inst, paused) 
-			if inst.components.locomotor.wantstomoveforward then
-				if not inst:HasTag("cd_skill") then
-					inst.movetask:Cancel()
-					inst.movetask = nil
-					inst:RemoveTag("cd_skill")
-				end
-				inst.components.talker:Say("结束")
-				inst:RemoveTag("cd_heat")
-				return
-			end
-		end 
-	)
 end
+--***************************************************************
 --下面是人物的属性值
+--***********************************************************************
 local master_postinit = function(inst)
 
 	--语音和地图图标
@@ -293,14 +294,10 @@ local master_postinit = function(inst)
 	inst.components.locomotor.runspeed = 7
 	--饥饿速度
 	inst.components.hunger.hungerrate = 0.15
-	--脑残值光环？
-	-- inst.components.sanity.neg_aura_mult = 1
 	--设置免伤百分比
 	inst.components.health:SetAbsorptionAmount(0)
 	--自动回血
-	inst.components.health:StartRegen(1, 2)
-	--自动回理智
-	-- inst.components.edible.sanityvalue = 2
+	inst.components.health:StartRegen(1, 10)
 	--攻击损失精神
 	inst:ListenForEvent("onhitother",function(inst,data)
 		inst.components.sanity:DoDelta(-1)
@@ -316,8 +313,7 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("topspeed", topspeed)
 	inst:ListenForEvent("skill", skill)
 	-- 理智光环
-	-- inst.components.edible.sanityvalue = 2
-	inst:DoPeriodicTask(2,function() 
+	inst:DoPeriodicTask(20,function() 
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 8)
 		for k,v in pairs(ents) do
@@ -326,13 +322,6 @@ local master_postinit = function(inst)
 			end
 		end
 	end)
-	-- local Combat = Class(function(self, inst)
-	-- 	--攻击距离
-	-- 	inst.components.combat.attackrange = 8
-	-- 	--打击范围
-	-- 	inst.components.combat.hitrange = 3
-	-- 	--攻击频率
-	-- 	inst.components.combat.min_attack_period = 4
 	-- 	--科技水平
 	inst.components.builder.science_bonus = 1
     -- end)
