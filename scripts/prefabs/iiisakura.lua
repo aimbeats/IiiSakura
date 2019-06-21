@@ -197,8 +197,8 @@ local function topspeed(inst)
 		inst.components.talker:Say("雷动已开启")
 		inst:AddTag("topspeed")--赋上雷动状态标签
 		--移动速度加快
-		inst.components.locomotor.walkspeed = 10
-		inst.components.locomotor.runspeed = 12
+		inst.components.locomotor.walkspeed = (9 + ratedata[statedata].multiplier_normal)
+		inst.components.locomotor.runspeed = (11 + ratedata[statedata].multiplier_normal)
 		inst.topspeed_delayed = inst:DoPeriodicTask(1, function(inst)
 			inst.components.hunger:DoDelta(-2)
 		end)
