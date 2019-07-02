@@ -1,3 +1,6 @@
+--***************************************************************
+--妖刀-千盏繁华
+--***********************************************************************
 local assets=
 { 
     Asset("ANIM", "anim/rock_shovel.zip"),--这个是放在地上的动画文件
@@ -55,14 +58,6 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.components.weapon:SetDamage(10)--设置武器的攻击力damage
     inst.components.weapon:SetOnAttack(onattack)
     inst.components.equippable.walkspeedmult = 1.5--设置持有时的移动速度
-	
-	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
-	inst.components.finiteuses:SetMaxUses(150)--设置最大耐久MaxUse
-    inst.components.finiteuses:SetUses(150)--设置当前耐久CanUse
-    inst:AddComponent("tool")--添加工具功能
-    inst.components.tool:SetAction(ACTIONS.MINE, 2) --可以挖矿
-    inst.components.tool:SetAction(ACTIONS.DIG,2) --可以挖掘
-    --inst.components.tool:SetAction(ACTIONS.chop,1) --可以砍树,会出现bug,先注释
 	if inst.components.finiteuses.current < 0 then
        inst.components.finiteuses.current = 0
     end

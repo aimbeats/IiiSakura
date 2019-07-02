@@ -298,6 +298,8 @@ local master_postinit = function(inst)
 	inst.components.health:SetAbsorptionAmount(0)
 	--自动回血
 	inst.components.health:StartRegen(1, 10)
+	--不怕怪物
+    inst.components.sanity.neg_aura_mult = 0
 	--攻击损失精神
 	inst:ListenForEvent("onhitother",function(inst,data)
 		inst.components.sanity:DoDelta(-1)
@@ -322,9 +324,8 @@ local master_postinit = function(inst)
 			end
 		end
 	end)
-	-- 	--科技水平
+	--科技水平
 	inst.components.builder.science_bonus = 1
-    -- end)
 
 end
 

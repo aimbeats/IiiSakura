@@ -1,4 +1,6 @@
-
+--***************************************************************
+--锁定打击目标的预设物
+--***********************************************************************
 local assets =
 {
     Asset("ANIM", "anim/fox_mask.zip")
@@ -14,11 +16,11 @@ local function spark(inst)
 			end
 			if v.components.combat and not v:HasTag("player") and not v:HasTag("sparked") then
 				v.components.combat:GetAttacked(inst, damage)
-			elseif v:HasTag("player") and TheNet:GetPVPEnabled() and not v:HasTag("sparked") and not v.prefab == "marisa" then
+			elseif v:HasTag("player") and TheNet:GetPVPEnabled() and not v:HasTag("sparked") and not v.prefab == "iiisakura" then
 				v.components.combat:GetAttacked(inst, damage)
-			--破坏树木建筑
-			elseif v.components.workable and v.components.workable.workleft > 0 and not v.components.inventoryitem then
-				v.components.workable:Destroy(inst)
+			--点燃摧毁一切可燃烧物品
+			elseif v and v:IsValid() and v.components.burnable then
+				v.components.burnable:OnRemoveFromEntity()
 			end
 			end
 	end
@@ -48,13 +50,17 @@ local function fn()
     inst.Transform:SetFourFaced()
 	inst.Transform:SetScale(3.5, 3.5, 3.5)
 
-    inst.entity:SetPristine()
+	inst.entity:SetPristine()
+	
+	inst:AddComponent("explosive") --添加爆炸组件
+    inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
+    inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
 
     if not TheWorld.ismastersim then
         return inst
     end
-	inst:DoTaskInTime(15, spark)
-    inst:DoTaskInTime(15.55, inst.Remove)
+	inst:DoTaskInTime(15, spark) --15秒后对目标区域进行核弹打击
+    inst:DoTaskInTime(15.55, inst.Remove) --移除预设物
 
     return inst
 end

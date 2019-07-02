@@ -11,7 +11,7 @@ PrefabFiles = {
 "rock_shovel",--多功能石铲
 -- "gold_shovel",--多功能金铲
 -- "tm_shovel"--多功能铥铲
-"nuclear_silo",--核弹发射井
+-- "nuclear_silo",--核弹发射井
 -- "nuclear_bomb",--蘑菇弹
 "laser_pointer",--激光指示器
 "hit_marks",--锁定打击
@@ -70,12 +70,12 @@ Assets = {
 	--多功能铥铲
 	Asset( "IMAGE", "images/inventoryimages/tm_shovel.tex" ),
 	Asset( "ATLAS", "images/inventoryimages/tm_shovel.xml" ),
-	--核弹发射井
-	Asset( "IMAGE", "images/inventoryimages/nuclear_silo.tex" ),
-	Asset( "ATLAS", "images/inventoryimages/nuclear_silo.xml" ),
-	--蘑菇弹
-	Asset( "IMAGE", "images/inventoryimages/nuclear_bomb.tex" ),
-	Asset( "ATLAS", "images/inventoryimages/nuclear_bomb.xml" ),
+	-- --核弹发射井
+	-- Asset( "IMAGE", "images/inventoryimages/nuclear_silo.tex" ),
+	-- Asset( "ATLAS", "images/inventoryimages/nuclear_silo.xml" ),
+	-- --蘑菇弹
+	-- Asset( "IMAGE", "images/inventoryimages/nuclear_bomb.tex" ),
+	-- Asset( "ATLAS", "images/inventoryimages/nuclear_bomb.xml" ),
 	--激光指示器
 	Asset( "IMAGE", "images/inventoryimages/laser_pointer.tex" ),
 	Asset( "ATLAS", "images/inventoryimages/laser_pointer.xml" ),
@@ -98,6 +98,8 @@ TUNING.checkKey = GetModConfigData('checkKey')
 AddMinimapAtlas("images/map_icons/iiisakura.xml")
 --加载台词
 STRINGS.CHARACTERS.TSUI_RABBIT = require "speech_iiisakura"
+--新的合成栏
+local marisatab = AddRecipeTab( "专属", 999, "images/hud/iiisakuratab.xml", "iiisakuratab.tex", "iiisakura_builder")
 --制作物品时的配方和图片
 -- 第一个参数，prefab的名字。
 -- 第二个参数，配方表，用{}框起来，里面每一项配方用一个Ingredient。Ingredient的第一个参数是具体的prefab名，第二个是数量
@@ -105,11 +107,11 @@ STRINGS.CHARACTERS.TSUI_RABBIT = require "speech_iiisakura"
 -- 第四个参数，装备需要的科技等级，TECH.NONE 表明不需要科技，随时都可以制造。
 -- 后续5个参数都是nil，表明不需要这些参数，但需要占位置
 -- 最后一个参数，指明图片文档地址，用于制作栏显示图片。
-local marisatab = AddRecipeTab( "Marisa's Tab", 514, "images/hud/marisatab.xml", "marisatab.tex", "marisa_builder")
+
 --狐狸面具：干草*5,、绳子*1、花瓣*5
 AddRecipe("fox_mask",
-{Ingredient("cutgrass", 1)}, RECIPETABS.WAR,
-TECH.NONE, nil, nil, nil, nil, nil,
+{Ingredient("cutgrass", 1)}, iiisakuratab,
+TECH.NONE, nil, nil, nil, nil, "iiisakura_builder",
 "images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
 -- --狐狸面具：干草*5,、绳子*1、花瓣*5
 -- AddRecipe("fox_mask",
@@ -157,15 +159,15 @@ TECH.NONE, nil, nil, nil, nil, nil,
 -- TECH.NONE, nil, nil, nil, nil, nil,
 -- "images/inventoryimages/tm_shovel.xml", "tm_shovel.tex" )
 --核弹发射井：石砖*20、电子元件*10、火药*5
-AddRecipe("nuclear_silo",
-{Ingredient("petals", 1)}, RECIPETABS.TOWN,
-TECH.NONE, nil, nil, nil, nil, nil,
-"images/inventoryimages/nuclear_silo.xml", "nuclear_silo.tex" )
+-- AddRecipe("nuclear_silo",
+-- {Ingredient("petals", 1)}, RECIPETABS.TOWN,
+-- TECH.NONE, nil, nil, nil, nil, nil,
+-- "images/inventoryimages/nuclear_silo.xml", "nuclear_silo.tex" )
 --蘑菇弹：红蓝绿蘑菇*20
-AddRecipe("nuclear_bomb",
-{Ingredient("petals", 1)}, RECIPETABS.TOWN,
-TECH.NONE, nil, nil, nil, nil, nil,
-"images/inventoryimages/nuclear_bomb.xml", "nuclear_bomb.tex" )
+-- AddRecipe("nuclear_bomb",
+-- {Ingredient("petals", 1)}, RECIPETABS.TOWN,
+-- TECH.NONE, nil, nil, nil, nil, nil,
+-- "images/inventoryimages/nuclear_bomb.xml", "nuclear_bomb.tex" )
 --激光指示器：燧石*1、电器元件*1
 AddRecipe("laser_pointer",
 {Ingredient("petals", 1)}, RECIPETABS.TOWN,
