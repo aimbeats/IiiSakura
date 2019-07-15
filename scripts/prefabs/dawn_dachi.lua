@@ -22,6 +22,15 @@ local function OnEquip(inst, owner) --当你把武器装备到手上时，会触
     inst.Light:SetFalloff(0.75)
     inst.Light:SetIntensity(.65)
     inst.Light:SetColour(32/255,229/255,153/255)
+    --每秒范围回血
+    inst:DoPeriodicTask(2,function() 
+        local ents = FindEntities(x,y,z,8)
+        for k,v in pairs(ents) do
+            if v.components.health then              
+                v.components.health:DoDelta(1) 
+            end
+        end
+    end)
 end
 
 local function OnUnequip(inst, owner) 
@@ -78,15 +87,6 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.Light:SetIntensity(.65)
     inst.Light:SetColour(32/255,229/255,153/255)
 
-    --每秒范围回血
-    -- inst:DoPeriodicTask(2,function() 
-    --     local ents = FindEntities(x,y,z,8)
-    --     for k,v in pairs(ents) do
-    --             if v.components.health then              
-    --                 v.components.health:DoDelta(1) 
-    --             end
-    --     end
-    -- end)
     return inst
 end
 STRINGS.NAMES.DAWN_DACHI = "破晓"

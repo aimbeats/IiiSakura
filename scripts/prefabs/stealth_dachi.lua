@@ -68,10 +68,6 @@ local function init()
 	inst.components.finiteuses:SetMaxUses(200)--设置最大耐久MaxUse
     inst.components.finiteuses:SetUses(200)--设置当前耐久CanUse
 	
-    --inst:AddComponent("tool")--添加工具功能
-    --inst.components.tool:SetAction(ACTIONS.MINE, 2) --可以挖矿
-    --inst.components.tool:SetAction(ACTIONS.DIG,2) --可以挖掘
-    --inst.components.tool:SetAction(ACTIONS.chop,1) --可以砍树,会出现bug,先注释
 	if inst.components.finiteuses.current < 0 then
        inst.components.finiteuses.current = 0
     end

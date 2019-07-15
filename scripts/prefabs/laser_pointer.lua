@@ -31,6 +31,7 @@ local function fusionBlow(inst, target, pos)
     caster.components.talker:Say("锁定打击目标", 2, false)
     TheNet:Announce("警告！侦测到在途的聚变打击！")
     SpawnPrefab("hit_marks").Transform:SetPosition(pos.x,pos.y,pos.z)
+    -- inst.Remove --使用后移除指示器，先注释掉用于测试
     -- SpawnPrefab("master").Transform:SetPosition()
 end
 
