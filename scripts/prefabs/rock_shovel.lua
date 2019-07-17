@@ -30,7 +30,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
 	
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
+    inst.entity:AddNetwork() --让所有人都能看到这个东西
      
     MakeInventoryPhysics(inst)   
       

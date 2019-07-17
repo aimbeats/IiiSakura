@@ -41,7 +41,7 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
 	inst.entity:AddLight() --发光
-    inst.entity:AddNetwork()
+    inst.entity:AddNetwork() --让所有人都能看到这个东西
 
     MakeObstaclePhysics(inst, 1) --建筑物理碰撞体积
 	-- inst.MiniMapEntity:SetIcon("wharang_shrine.tex") --设置小地图标志

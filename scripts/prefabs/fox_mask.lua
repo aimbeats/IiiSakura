@@ -61,7 +61,7 @@ local function fn()
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
+    inst.entity:AddNetwork() --让所有人都能看到这个东西
 
     MakeInventoryPhysics(inst)
 

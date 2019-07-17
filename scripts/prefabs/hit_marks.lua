@@ -45,7 +45,7 @@ local function fn()
 	inst.light = 0.3
 
     inst.entity:AddTransform()
-    inst.entity:AddNetwork()
+    inst.entity:AddNetwork() --让所有人都能看到这个东西
 
     inst.Transform:SetFourFaced()
 	inst.Transform:SetScale(3.5, 3.5, 3.5)

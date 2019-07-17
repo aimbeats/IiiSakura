@@ -16,15 +16,24 @@ local function OnEquip(inst, owner) --当你把武器装备到手上时，会触
     owner.AnimState:OverrideSymbol("swap_object", "swap_rock_shovel", "swap_rock_shovel")--这句话的含义是，用swap_myitem_build这个文件里的swap_myitem这个symbol，覆盖人物的swap_object这个symbol。swap_object，是人物身上的一个symbol，swap_myitem_build，则是我们之前准备好的，用于手持武器的build，swap_myitem就是存放手持武器的图片的文件夹的名字，mod tools自动把它输出为一个symbol。
     owner.AnimState:Show("ARM_carry") --显示持物手
     owner.AnimState:Hide("ARM_normal") --隐藏普通的手
+    if inst.components.fueled ~= nil then
+        inst.components.fueled:StartConsuming()
+    end
 end
 
 local function OnUnequip(inst, owner) 
     owner.AnimState:Hide("ARM_carry") --隐藏持物手
     owner.AnimState:Show("ARM_normal") --显示普通的手
+    if inst.components.fueled ~= nil then
+        inst.components.fueled:StopConsuming()
+    end
 end
 
 local function onattack(inst, attacker, target)
-	attacker.SoundEmitter:PlaySound("spells/sound/sweep")
+    --攻击时附带燃烧能力
+	if target ~= nil and target.components.burnable ~= nil and math.random() < TUNING.TORCH_ATTACK_IGNITE_PERCENT * target.components.burnable.flammability then
+        target.components.burnable:Ignite(nil, attacker)
+    end
 end
 
 local function fn()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
@@ -32,7 +41,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
 	
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
+    inst.entity:AddNetwork() --让所有人都能看到这个东西
      
     MakeInventoryPhysics(inst)   
       
@@ -55,17 +64,15 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.components.equippable:SetOnUnequip( OnUnequip )
 	
 	inst:AddComponent("weapon")     
-    inst.components.weapon:SetDamage(10)--设置武器的攻击力damage
+    inst.components.weapon:SetDamage(70)--设置武器的攻击力damage
     inst.components.weapon:SetOnAttack(onattack)
-    inst.components.equippable.walkspeedmult = 1.5--设置持有时的移动速度
+    inst.components.equippable.walkspeedmult = 1--设置持有时的移动速度
 	
-	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
-	inst.components.finiteuses:SetMaxUses(150)--设置最大耐久MaxUse
-    inst.components.finiteuses:SetUses(150)--设置当前耐久CanUse
-	if inst.components.finiteuses.current < 0 then
-       inst.components.finiteuses.current = 0
-    end
-	inst.components.finiteuses:SetOnFinished(inst.Remove)
+    inst:AddComponent("fueled")--添加燃料组件
+    inst.components.fueled.fueltype = FUELTYPE.USAGE --可燃物类型，话说这个防毒面具是什么鬼？
+    inst.components.fueled:InitializeFuelLevel(100) --这个似乎是燃烧的时间？
+    inst.components.fueled:SetDepletedFn(inst.Remove) --燃烧结束移除武器
+	
 
     return inst
 end
