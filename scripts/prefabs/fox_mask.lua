@@ -109,5 +109,7 @@ local function fn()
         light:SetColour(0/255, 255/255, 0/255)
     return inst
 end
-
+STRINGS.NAMES.FOX_MASK = "狐狸面具"
+STRINGS.RECIPE_DESC.FOX_MASK = "崩坏的面具" 
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.FOX_MASK = "有人管这个叫夜视仪 "
 return Prefab("common/inventory/fox_mask", fn, assets, prefabs)

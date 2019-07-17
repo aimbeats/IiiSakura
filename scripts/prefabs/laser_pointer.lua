@@ -1,5 +1,5 @@
 --***************************************************************
---激光指示器
+--伪·蘑菇弹
 --***********************************************************************
 local assets=
 { 
@@ -31,7 +31,7 @@ local function fusionBlow(inst, target, pos)
     caster.components.talker:Say("锁定打击目标", 2, false)
     TheNet:Announce("警告！侦测到在途的聚变打击！")
     SpawnPrefab("hit_marks").Transform:SetPosition(pos.x,pos.y,pos.z)
-    -- inst.Remove --使用后移除指示器，先注释掉用于测试
+    -- inst.Remove --使用后移除，先注释掉用于测试
     -- SpawnPrefab("master").Transform:SetPosition()
 end
 
@@ -68,7 +68,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     
     return inst
 end
-STRINGS.NAMES.LASER_POINTER = "激光指示器"
-STRINGS.RECIPE_DESC.LASER_POINTER = "锁定打击目标" 
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.LASER_POINTER = "据说是给什么定位用的"
+STRINGS.NAMES.LASER_POINTER = "伪·蘑菇弹"
+STRINGS.RECIPE_DESC.LASER_POINTER = "聚变打击已就绪！" 
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.LASER_POINTER = "记忆告诉我说这个是用来种蘑菇的"
 return Prefab("common/inventory/laser_pointer", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。

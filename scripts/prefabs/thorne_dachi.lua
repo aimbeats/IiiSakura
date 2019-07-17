@@ -84,7 +84,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     return inst
 end
 STRINGS.NAMES.THORNE_DACHI = "荆棘" -- 物体在游戏中显示的名字
-STRINGS.RECIPE_DESC.THORNE_DACHI = "我会永远记住这份痛苦\n尽管相比我所造成的伤害微不足道" -- 物体的制作栏描述
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.THORNE_DACHI = "虚无的表向" -- 物体的检查描述
+STRINGS.RECIPE_DESC.THORNE_DACHI = "赎罪者的告白" -- 物体的制作栏描述
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.THORNE_DACHI = "我会永远记住这份痛苦\n尽管相比我所造成的伤害微不足道" -- 物体的检查描述
 
 return Prefab("common/inventory/thorne_dachi", fn, assets, prefabs)--最后，返回这个实体到modmain里注册。Prefab这个函数，第一个参数只需要看最后一个/后面的部分，视为这个prefab的ID，fn则是上面定义的fn，是这个物品的创建函数，assets，对应上面的assets，主要是用于注册美术资源，如果你在这里注册了相应的美术资源，就不需要在modmain里再注册一次。prefabs，目前还未明确具体的作用。
