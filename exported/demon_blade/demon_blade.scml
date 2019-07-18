@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r7">
+    <folder id="0" name="demon_blade">
+        <file id="0" name="demon_blade/demon_blade.png" width="256" height="512" pivot_x="0.322222" pivot_y="0.280556"/>
+    </folder>
+    <entity id="0" name="demon_blade">
+        <animation id="0" name="idle" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="demon_blade">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-59.511168" y="-86.355328"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

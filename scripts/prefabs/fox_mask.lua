@@ -12,7 +12,7 @@ local assets =
 local prefabs = {}
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_hat", "swap_fox_mask", "swap_hat")
+    owner.AnimState:OverrideSymbol("swap_hat", "swap_fox_mask", "swap_fox_mask")
     owner.AnimState:Show("HAT")
     owner.AnimState:Show("HAIR_HAT")
     owner.AnimState:Hide("HAIR_NOHAT")
@@ -21,6 +21,9 @@ local function onequip(inst, owner)
     if owner:HasTag("player") then
         owner.AnimState:Hide("HEAD")
         owner.AnimState:Show("HEAD_HAT")
+    end
+    if inst.components.fueled ~= nil then
+        inst.components.fueled:StartConsuming()
     end
 end
 
@@ -33,6 +36,9 @@ local function onunequip(inst, owner)
     if owner:HasTag("player") then
         owner.AnimState:Show("HEAD")
         owner.AnimState:Hide("HEAD_HAT")
+    end
+    if inst.components.fueled ~= nil then
+        inst.components.fueled:StopConsuming()
     end
 end
 
@@ -99,6 +105,11 @@ local function fn()
 
     inst:AddComponent("useableitem") --可以使用？
     inst.components.useableitem:SetOnUseFn( state ) --用于右键穿戴面具
+
+    inst:AddComponent("fueled")--添加燃料组件
+    inst.components.fueled.fueltype = FUELTYPE.USAGE --可燃物类型，话说这个防毒面具是什么鬼？
+    inst.components.fueled:InitializeFuelLevel(1440) --燃烧时间3天
+    inst.components.fueled:SetDepletedFn(inst.Remove) --燃烧结束后移除
 
     --创建光照
     local light = inst.entity:AddLight()

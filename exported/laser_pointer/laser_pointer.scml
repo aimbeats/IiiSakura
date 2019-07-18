@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r7">
-    <folder id="0">
-        <file id="0" name="swap_fox_mask.png" width="64" height="64" pivot_x="0.515625" pivot_y="0.53125"/>
+    <folder id="0" name="laser_pointer">
+        <file id="0" name="laser_pointer/laser_pointer.png" width="64" height="64" pivot_x="0.484375" pivot_y="0.359375"/>
     </folder>
-    <entity id="0" name="swap_fox_mask">
-        <animation id="0" name="BUILD" length="1000" interval="100">
+    <entity id="0" name="rock_dachi">
+        <animation id="0" name="idle" length="1000" interval="100">
             <mainline>
                 <key id="0">
                     <object_ref id="0" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" name="swap_fox_mask">
+            <timeline id="0" name="laser_pointer">
                 <key id="0" spin="0">
-                    <object folder="0" file="0" x="2" y="-4"/>
+                    <object folder="0" file="0" x="-3" y="-2"/>
                 </key>
             </timeline>
         </animation>

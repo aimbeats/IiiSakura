@@ -2,18 +2,18 @@
 PrefabFiles = {
 "iiisakura",--三世樱
 "fox_mask",--狐狸面具
--- "rock_dachi",--石刀
+"rock_dachi",--石刀
 "stealth_dachi",--无影剑
 "dawn_dachi",--破晓
--- "nightmare_dachi",--梦魇
+"nightmare_dachi",--梦魇
 "thorne_dachi",--荆棘
--- "demon_blade",--妖刀·千盏繁华
+"demon_blade",--妖刀·千盏繁华
 "rock_shovel",--多功能石铲
 -- "gold_shovel",--多功能金铲
 -- "tm_shovel"--多功能铥铲
 -- "nuclear_silo",--核弹发射井
 -- "nuclear_bomb",--蘑菇弹
-"laser_pointer",--激光指示器
+"laser_pointer",--伪·蘑菇弹
 "hit_marks",--锁定打击
 }
 --这里存放该mod所需要的所有动画文件和图片，需要把所有的图片和xml文件存放在这里
@@ -70,13 +70,7 @@ Assets = {
 	--多功能铥铲
 	Asset( "IMAGE", "images/inventoryimages/tm_shovel.tex" ),
 	Asset( "ATLAS", "images/inventoryimages/tm_shovel.xml" ),
-	-- --核弹发射井
-	-- Asset( "IMAGE", "images/inventoryimages/nuclear_silo.tex" ),
-	-- Asset( "ATLAS", "images/inventoryimages/nuclear_silo.xml" ),
-	-- --蘑菇弹
-	-- Asset( "IMAGE", "images/inventoryimages/nuclear_bomb.tex" ),
-	-- Asset( "ATLAS", "images/inventoryimages/nuclear_bomb.xml" ),
-	--激光指示器
+	--伪·蘑菇弹
 	Asset( "IMAGE", "images/inventoryimages/laser_pointer.tex" ),
 	Asset( "ATLAS", "images/inventoryimages/laser_pointer.xml" ),
 }
@@ -99,7 +93,7 @@ AddMinimapAtlas("images/map_icons/iiisakura.xml")
 --加载台词
 STRINGS.CHARACTERS.TSUI_RABBIT = require "speech_iiisakura"
 --新的合成栏
-local marisatab = AddRecipeTab( "专属", 999, "images/hud/iiisakuratab.xml", "iiisakuratab.tex", "iiisakura_builder")
+local iiisakuratab = AddRecipeTab( "专属", 999, "images/hud/iiisakuratab.xml", "iiisakuratab.tex", "iiisakura_builder")
 --制作物品时的配方和图片
 -- 第一个参数，prefab的名字。
 -- 第二个参数，配方表，用{}框起来，里面每一项配方用一个Ingredient。Ingredient的第一个参数是具体的prefab名，第二个是数量
@@ -158,17 +152,7 @@ TECH.NONE, nil, nil, nil, nil, "iiisakura_builder",
 -- {Ingredient("thulecite", 1),Ingredient("twigs", 10)}, RECIPETABS.WAR,
 -- TECH.NONE, nil, nil, nil, nil, nil,
 -- "images/inventoryimages/tm_shovel.xml", "tm_shovel.tex" )
---核弹发射井：石砖*20、电子元件*10、火药*5
--- AddRecipe("nuclear_silo",
--- {Ingredient("petals", 1)}, RECIPETABS.TOWN,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/nuclear_silo.xml", "nuclear_silo.tex" )
 --蘑菇弹：红蓝绿蘑菇*20
--- AddRecipe("nuclear_bomb",
--- {Ingredient("petals", 1)}, RECIPETABS.TOWN,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/nuclear_bomb.xml", "nuclear_bomb.tex" )
---激光指示器：燧石*1、电器元件*1
 AddRecipe("laser_pointer",
 {Ingredient("petals", 1)}, RECIPETABS.TOWN,
 TECH.NONE, nil, nil, nil, nil, nil,

@@ -13,12 +13,15 @@ local prefabs = {}
 
 --人物出生自带的物品
 local start_inv = {
-	"thorne_dachi",
-	"rock_shovel",
-	"stealth_dachi",
-	"cutgrass",
-	"laser_pointer",
-	"fox_mask"
+	"rock_dachi",--石刀
+	"thorne_dachi",--荆棘
+	"rock_shovel",--石铲
+	"stealth_dachi",--无影剑
+	"cutgrass",--草
+	"laser_pointer",--伪·蘑菇弹
+	"fox_mask",--狐狸面具
+	"nightmare_dachi",--梦魇
+	"demon_blade"--妖刀·千盏繁华
 }
 --这将为服务器和客户机初始化。标签可以在这里添加。
 local common_postinit = function(inst)

@@ -3,7 +3,7 @@
 --***********************************************************************
 local assets =
 {
-    Asset("ANIM", "anim/fox_mask.zip")
+    Asset("ANIM", "anim/hit_marks.zip")
 }
 local function spark(inst)
 	local damage = 5000
@@ -49,19 +49,21 @@ local function fn()
 
     inst.Transform:SetFourFaced()
 	inst.Transform:SetScale(3.5, 3.5, 3.5)
+	local anim = inst.entity:AddAnimState()
+	anim:SetBank("hit_marks")
+	anim:SetBuild("hit_marks")
+	anim:PlayAnimation("hit_marks_fx",true)  --动画的名字
+	inst.Transform:SetScale(3, 3, 3)  --这里可以改变预设物大小
 
 	inst.entity:SetPristine()
-	
-	inst:AddComponent("explosive") --添加爆炸组件
-    inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
-    inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
 
     if not TheWorld.ismastersim then
         return inst
     end
-	inst:DoTaskInTime(15, spark) --15秒后对目标区域进行核弹打击
-    inst:DoTaskInTime(15.55, inst.Remove) --移除预设物
-
+	-- inst:DoTaskInTime(15, spark) --15秒后对目标区域进行核弹打击
+    -- inst:DoTaskInTime(15.55, inst.Remove) --移除预设物
+	inst:DoTaskInTime(4.85, spark) --5秒后对目标区域进行核弹打击
+    inst:DoTaskInTime(5, inst.Remove) --移除预设物
     return inst
 end
 

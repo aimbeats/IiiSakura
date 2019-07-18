@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r7">
-    <folder id="0">
-        <file id="0" name="swap_rock_shovel.png" width="200" height="400" pivot_x="0.483333" pivot_y="0.158333"/>
+    <folder id="0" name="rock_dachi">
+        <file id="0" name="rock_dachi/rock_dachi.png" width="102" height="309" pivot_x="0.441176" pivot_y="0.174757"/>
     </folder>
-    <entity id="0" name="swap_rock_shovel">
-        <animation id="0" name="BUILD" length="1000" interval="100">
+    <entity id="0" name="rock_dachi">
+        <animation id="0" name="idle" length="1000" interval="100">
             <mainline>
                 <key id="0">
                     <object_ref id="0" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" name="swap_rock_shovel">
+            <timeline id="0" name="rock_dachi">
                 <key id="0" spin="0">
-                    <object folder="0" file="0" x="3" y="-121"/>
+                    <object folder="0" file="0" x="-2.12766" y="-42.553191"/>
                 </key>
             </timeline>
         </animation>
