@@ -16,15 +16,6 @@ local function OnEquip(inst, owner) --当你把武器装备到手上时，会触
     owner.AnimState:OverrideSymbol("swap_object", "swap_nightmare_dachi", "swap_nightmare_dachi")--这句话的含义是，用swap_myitem_build这个文件里的swap_myitem这个symbol，覆盖人物的swap_object这个symbol。swap_object，是人物身上的一个symbol，swap_myitem_build，则是我们之前准备好的，用于手持武器的build，swap_myitem就是存放手持武器的图片的文件夹的名字，mod tools自动把它输出为一个symbol。
     owner.AnimState:Show("ARM_carry") --显示持物手
     owner.AnimState:Hide("ARM_normal") --隐藏普通的手
-    --每秒范围降低理智
-    inst:DoPeriodicTask(2,function() 
-        local ents = FindEntities(x,y,z,2)
-        for k,v in pairs(ents) do
-            if v.components.sanity then              
-                v.components.sanity:DoDelta(1) 
-            end
-        end
-    end)
     if inst.components.fueled ~= nil then
         inst.components.fueled:StartConsuming()
     end
@@ -44,6 +35,17 @@ local function onattack(inst, attacker, target)
         target.components.burnable:Ignite(nil, attacker)
     end
 end
+
+-- local function OnTakeDamage(inst, damage_amount)
+--     local owner = inst.components.inventoryitem.owner
+--     if owner then
+--         local sanity = owner.components.sanity
+--         if sanity then
+--             local unsaneness = damage_amount * TUNING.ARMOR_SANITY_DMG_AS_SANITY
+--             sanity:DoDelta(-unsaneness, false)
+--         end
+--     end
+-- end
 
 local function fn()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
     local inst = CreateEntity()
@@ -71,6 +73,8 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst:AddComponent("equippable")--添加可装备组件，有了这个组件，你才能装备物品
     inst.components.equippable:SetOnEquip( OnEquip ) -- 设定物品在装备和卸下时执行的函数。在前面定义的两个函数是OnEquip，OnUnequip里，我们主要是围绕着改变人物外形设定了一些基本代码。 在装上的时候，会让人物的持物手显示出来，普通手隐藏，卸下时则反过来。需要注意的是，OnEquip，OnUnequip都是本地函数，要想让它们发挥作用，就必须要通过这里的组件接口来实现。
     inst.components.equippable:SetOnUnequip( OnUnequip )
+    inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
+    inst.components.equippable.dapperness = -0.5
 	
 	inst:AddComponent("weapon")     
     inst.components.weapon:SetDamage(50)--设置武器的攻击力damage

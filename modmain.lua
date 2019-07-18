@@ -11,8 +11,6 @@ PrefabFiles = {
 "rock_shovel",--多功能石铲
 -- "gold_shovel",--多功能金铲
 -- "tm_shovel"--多功能铥铲
--- "nuclear_silo",--核弹发射井
--- "nuclear_bomb",--蘑菇弹
 "laser_pointer",--伪·蘑菇弹
 "hit_marks",--锁定打击
 }
@@ -161,8 +159,8 @@ TECH.NONE, nil, nil, nil, nil, nil,
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.MARISA =
 {
-	GENERIC = "你好，八重樱",
-	ATTACKER = "八重樱，现在我们是对手了！",
+	GENERIC = "你好，三世樱",
+	ATTACKER = "三世樱，现在我们是对手了！",
 	MURDERER = "你的双手也会沾染无辜者的鲜血吗？",
 	REVIVER = "我的救命恩人！",
 	GHOST = "巫女也需要救赎",
