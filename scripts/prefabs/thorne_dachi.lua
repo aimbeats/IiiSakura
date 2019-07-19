@@ -26,10 +26,11 @@ local function onattack(inst, attacker, target)
 end
 
 local function onfinished(inst) -- 耐久用光时
-	inst:Remove()
-    local dawn = SpawnPrefab("dawn_dachi")
     local x, y, z = inst.Transform:GetWorldPosition()
+    SpawnPrefab("dawn_dachi").Transform:SetPosition(pos.x,pos.y,pos.z)
     dawn.Transform:SetPosition(x, y, z)--在脚下生成破晓武器
+    print(inst.Transform:GetWorldPosition())
+	inst:Remove()
 end
 
 local function fn()--这个函数就是实际创建物体的函数，上面所有定义到的函数，变量，都需要直接或者间接地在这个函数中使用，才能起作用
@@ -60,7 +61,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.components.equippable:SetOnUnequip( OnUnequip )
 	
 	inst:AddComponent("weapon")     
-    inst.components.weapon:SetDamage(30)--设置武器的攻击力damage
+    inst.components.weapon:SetDamage(60)--设置武器的攻击力damage
     inst.components.equippable.walkspeedmult = 1--设置持有时的移动速度
 
     local function onattack(weapon, attacker, target)
