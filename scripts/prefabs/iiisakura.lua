@@ -206,7 +206,7 @@ local function topspeed(inst)
 		inst.components.locomotor.walkspeed = (9 + ratedata[statedata].multiplier_normal)
 		inst.components.locomotor.runspeed = (11 + ratedata[statedata].multiplier_normal)
 		inst.topspeed_delayed = inst:DoPeriodicTask(1, function(inst)
-			inst.components.hunger:DoDelta(-2)
+			inst.components.hunger:DoDelta(-5)
 		end)
 	else
 		inst.components.talker:Say("雷动状态已解除")
@@ -242,7 +242,7 @@ local function skill(inst)
 			inst.components.talker:Say("繁华落尽")
 			inst:AddTag("cd_skill")
 			--inst.AnimState:PlayAnimation("crash")--加载爆发时的动画
-			inst.skill_delayed = inst:DoPeriodicTask(2, function(inst)--每2秒对敌人造成50伤害
+			inst.skill_delayed = inst:DoPeriodicTask(2, function(inst)--每2秒对敌人造成90伤害
 				if not inst:HasTag("cancel_skill") then
 					inst.components.hunger:DoDelta(-20)
 					inst.components.health:DoDelta(-20)

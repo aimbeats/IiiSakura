@@ -73,7 +73,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst:AddComponent("equippable")--添加可装备组件，有了这个组件，你才能装备物品
     inst.components.equippable:SetOnEquip( OnEquip ) -- 设定物品在装备和卸下时执行的函数。在前面定义的两个函数是OnEquip，OnUnequip里，我们主要是围绕着改变人物外形设定了一些基本代码。 在装上的时候，会让人物的持物手显示出来，普通手隐藏，卸下时则反过来。需要注意的是，OnEquip，OnUnequip都是本地函数，要想让它们发挥作用，就必须要通过这里的组件接口来实现。
     inst.components.equippable:SetOnUnequip( OnUnequip )
-    inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
+    inst.components.equippable.equipslot = EQUIPSLOTS.HANDS
     inst.components.equippable.dapperness = -0.5
 	
 	inst:AddComponent("weapon")     
