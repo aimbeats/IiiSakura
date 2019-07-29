@@ -7,7 +7,7 @@ local assets=
     Asset("ANIM", "anim/swap_rock_shovel.zip"), --这个是手上动画
     Asset("ATLAS", "images/inventoryimages/rock_shovel.xml"),--物品栏图标的xml
 }
---目前我还弄不清楚下面这代码的具体意义，但就先这样空着吧，不能随意乱删，因为有一定的格式要求
+--有关的预制物，但是还没用到过
 local prefabs = {}
 
 local function OnEquip(inst, owner) --当你把武器装备到手上时，会触发这个函数

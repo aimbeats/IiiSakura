@@ -4,13 +4,11 @@
 local assets=
 { 
     Asset("ANIM", "anim/nightmare_dachi.zip"),--这个是放在地上的动画文件
-    Asset("ANIM", "anim/swap_rock_shovel.zip"), --这个是手上动画
+    Asset("ANIM", "anim/swap_rock_dachi.zip"), --这个是手上动画
     Asset("ATLAS", "images/inventoryimages/nightmare_dachi.xml"),--物品栏图标的xml
 }
---目前我还弄不清楚下面这代码的具体意义，但就先这样空着吧，不能随意乱删，因为有一定的格式要求
-local prefabs = 
-{
-}
+--有关的预制物，但是还没用到过
+local prefabs = {}
 
 local function OnEquip(inst, owner) --当你把武器装备到手上时，会触发这个函数
     owner.AnimState:OverrideSymbol("swap_object", "swap_nightmare_dachi", "swap_nightmare_dachi")--这句话的含义是，用swap_myitem_build这个文件里的swap_myitem这个symbol，覆盖人物的swap_object这个symbol。swap_object，是人物身上的一个symbol，swap_myitem_build，则是我们之前准备好的，用于手持武器的build，swap_myitem就是存放手持武器的图片的文件夹的名字，mod tools自动把它输出为一个symbol。
@@ -73,7 +71,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst:AddComponent("equippable")--添加可装备组件，有了这个组件，你才能装备物品
     inst.components.equippable:SetOnEquip( OnEquip ) -- 设定物品在装备和卸下时执行的函数。在前面定义的两个函数是OnEquip，OnUnequip里，我们主要是围绕着改变人物外形设定了一些基本代码。 在装上的时候，会让人物的持物手显示出来，普通手隐藏，卸下时则反过来。需要注意的是，OnEquip，OnUnequip都是本地函数，要想让它们发挥作用，就必须要通过这里的组件接口来实现。
     inst.components.equippable:SetOnUnequip( OnUnequip )
-    inst.components.equippable.equipslot = EQUIPSLOTS.HANDS
+    inst.components.equippable.equipslot = EQUIPSLOTS.HANDS --设定为手持方式
     inst.components.equippable.dapperness = -0.5
 	
 	inst:AddComponent("weapon")     
@@ -82,7 +80,7 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.components.equippable.walkspeedmult = 1--设置持有时的移动速度
 	
     inst:AddComponent("fueled")--添加燃料组件
-    inst.components.fueled.fueltype = FUELTYPE.USAGE --可燃物类型，话说这个防毒面具是什么鬼？
+    inst.components.fueled.fueltype = FUELTYPE.USAGE --可燃物类型，机翻是防毒面具什么鬼？
     inst.components.fueled:InitializeFuelLevel(180) --燃烧时间180s
     inst.components.fueled:SetDepletedFn(inst.Remove) --燃烧结束移除武器
 	

@@ -135,7 +135,8 @@ local function getAttack(inst,data)
 			local x, y, z = inst.Transform:GetWorldPosition()--获取主角的位置
 			inst.Transform:SetPosition(x+math.random(-10, 10),y+math.random(-10, 10),z+math.random(-10, 10)) --随机转移
 			local pos = attacker:GetPosition()
-    		SpawnPrefab("lightning_rod_fx").Transform:SetPosition(attacker.Transform:GetWorldPosition())--加载闪电动画
+			SpawnPrefab("lightning").Transform:SetPosition(attacker.Transform:GetWorldPosition())--加载闪电动画
+    		-- SpawnPrefab("lightning_rod_fx").Transform:SetPosition()
 			attacker.components.combat:GetAttacked(inst,50,nil) --对攻击者反伤50
 			inst:RemoveTag("dodge") --移除闪避状态标签
 			inst:DoTaskInTime( 5, function() inst:RemoveTag("cd_dodge") end)--5秒后移除技能冷却标签。

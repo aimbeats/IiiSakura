@@ -3,15 +3,14 @@
 --***********************************************************************
 local assets=
 { 
-    Asset("ANIM", "anim/rock_shovel.zip"),--这个是放在地上的动画文件
-    Asset("ANIM", "anim/swap_rock_shovel.zip"), --这个是手上动画
+    Asset("ANIM", "anim/rock_dachi.zip"),--这个是放在地上的动画文件
+    Asset("ANIM", "anim/swap_rock_dachi.zip"), --这个是手上动画
     Asset("ATLAS", "images/inventoryimages/thorne_dachi.xml"),--物品栏图标的xml
 }
-local prefabs = 
-{}
+local prefabs = {}
 
 local function OnEquip(inst, owner) --当你把武器装备到手上时，会触发这个函数
-    owner.AnimState:OverrideSymbol("swap_object", "swap_rock_shovel", "swap_rock_shovel")--这句话的含义是，用swap_myitem_build这个文件里的swap_myitem这个symbol，覆盖人物的swap_object这个symbol。swap_object，是人物身上的一个symbol，swap_myitem_build，则是我们之前准备好的，用于手持武器的build，swap_myitem就是存放手持武器的图片的文件夹的名字，mod tools自动把它输出为一个symbol。
+    owner.AnimState:OverrideSymbol("swap_object", "swap_rock_dachi", "swap_rock_dachi")--这句话的含义是，用swap_myitem_build这个文件里的swap_myitem这个symbol，覆盖人物的swap_object这个symbol。swap_object，是人物身上的一个symbol，swap_myitem_build，则是我们之前准备好的，用于手持武器的build，swap_myitem就是存放手持武器的图片的文件夹的名字，mod tools自动把它输出为一个symbol。
     owner.AnimState:Show("ARM_carry") --显示持物手
     owner.AnimState:Hide("ARM_normal") --隐藏普通的手
 end
@@ -25,11 +24,11 @@ local function onattack(inst, attacker, target)
 	attacker.SoundEmitter:PlaySound("spells/sound/sweep")
 end
 
-local function onfinished(inst) -- 耐久用光时
+local function onfinished(inst,owner) -- 耐久用光时
+    -- owner.components.inventory:GiveItem(SpawnPrefab("dawn_dachi"), nil, owner.Transform:GetPosition())
     local x, y, z = inst.Transform:GetWorldPosition()
-    SpawnPrefab("dawn_dachi").Transform:SetPosition(pos.x,pos.y,pos.z)
-    dawn.Transform:SetPosition(x, y, z)--在脚下生成破晓武器
-    print(inst.Transform:GetWorldPosition())
+    SpawnPrefab("fox_mask").Transform:SetPosition(x, y, z)--在脚下生成破晓武器
+    -- SpawnPrefab("lightning").Transform:SetPosition(pos.x,pos.y,pos.z)
 	inst:Remove()
 end
 
@@ -65,17 +64,20 @@ local function fn()--这个函数就是实际创建物体的函数，上面所�
     inst.components.equippable.walkspeedmult = 1--设置持有时的移动速度
 
     local function onattack(weapon, attacker, target)
-        --攻击损失血量
+        --攻击损失血量回复精神
         if attacker then
             if attacker.components.health then
                 attacker.components.health:DoDelta(-1)
+            end
+            if attacker.components.sanity then
+                attacker.components.sanity:DoDelta(2)
             end
         end
     end
     inst.components.weapon:SetOnAttack(onattack)
 	
 	inst:AddComponent("finiteuses")--添加有限耐久组件，按次数算
-	inst.components.finiteuses:SetMaxUses(500)--设置最大耐久MaxUse
+	inst.components.finiteuses:SetMaxUses(100)--设置最大耐久MaxUse
 	inst.components.finiteuses:SetUses(1)--设置当前耐久CanUse
 	if inst.components.finiteuses.current < 0 then
        inst.components.finiteuses.current = 0
