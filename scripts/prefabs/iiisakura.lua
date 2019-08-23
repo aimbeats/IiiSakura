@@ -131,6 +131,7 @@ local function getAttack(inst,data)
 	function inst.components.combat:GetAttacked(attacker, damage, weapon)
 		--如果拥有dodge闪避标签则执行闪避操作
 		if inst:HasTag("dodge") then
+			SpawnPrefab("werebeaver_transform_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载未知的瞬移动画(听说还会掉毛?)
 			inst.components.talker:Say("雷鸣!")
 			local x, y, z = inst.Transform:GetWorldPosition()--获取主角的位置
 			inst.Transform:SetPosition(x+math.random(-10, 10),y+math.random(-10, 10),z+math.random(-10, 10)) --随机转移
@@ -152,11 +153,12 @@ local function windPressure(inst)
 		inst.components.hunger:DoDelta(-10)
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 8)
+		SpawnPrefab("groundpound_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载熊大的拍地板动画
 		--检测人物范围内所有物体
 		for k,v in pairs(ents) do
-				--破坏树木建筑
+				--破坏树木
 				if v:HasTag("tree") and v.components.workable and v.components.workable.workleft > 0 then
-					v.components.workable:Destroy(inst)
+					v.components.workable:WorkedBy(inst,1)
 				end
 				--对敌人造成10伤害并击退
 				if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
@@ -170,7 +172,7 @@ local function windPressure(inst)
 		--产生画面震动效果
 		inst:ShakeCamera(CAMERASHAKE.FULL, .7, .02, .3, inst, 40)
 		inst:AddTag("cd_windPressure")--赋上冷却状态标签
-		inst:DoTaskInTime( 10, function() inst:RemoveTag("cd_windPressure") end)--10秒后移除技能冷却标签。
+		inst:DoTaskInTime( 5, function() inst:RemoveTag("cd_windPressure") end)--5秒后移除技能冷却标签。
 	else
 		inst.components.talker:Say("风压技能冷却中")
 	end
@@ -250,8 +252,13 @@ local function skill(inst)
 					inst.components.sanity:DoDelta(-20)
 					local pos = Vector3(inst.Transform:GetWorldPosition())
 					local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 10)
+					SpawnPrefab("groundpound_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载熊大的拍地板动画
 					--检测人物范围内所有物体
 					for k,v in pairs(ents) do
+						--破坏树木
+						if v:HasTag("tree") and v.components.workable and v.components.workable.workleft > 0 then
+							v.components.workable:Destroy(inst)
+						end
 						if v and v:IsValid() and v ~= inst and v.components.health and not v.components.health:IsDead() then
 							v.components.combat:GetAttacked(inst, 90)
 							inst.components.sanity:DoDelta(1) --用于抵消攻击时损失的精神值
@@ -304,7 +311,7 @@ local master_postinit = function(inst)
 	--设置免伤百分比
 	inst.components.health:SetAbsorptionAmount(0)
 	--自动回血
-	inst.components.health:StartRegen(1, 10)
+	inst.components.health:StartRegen(1, 5)
 	--不怕怪物
     inst.components.sanity.neg_aura_mult = 0
 	--攻击损失精神
@@ -331,6 +338,8 @@ local master_postinit = function(inst)
 			end
 		end
 	end)
+	--不受怪物的降智光环
+	inst.components.sanity.neg_aura_mult = 0 
 	--科技水平
 	inst.components.builder.science_bonus = 1
 

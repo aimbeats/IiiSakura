@@ -25,10 +25,8 @@ local function onattack(inst, attacker, target)
 end
 
 local function onfinished(inst,owner) -- 耐久用光时
-    -- owner.components.inventory:GiveItem(SpawnPrefab("dawn_dachi"), nil, owner.Transform:GetPosition())
     local x, y, z = inst.Transform:GetWorldPosition()
     SpawnPrefab("fox_mask").Transform:SetPosition(x, y, z)--在脚下生成破晓武器
-    -- SpawnPrefab("lightning").Transform:SetPosition(pos.x,pos.y,pos.z)
 	inst:Remove()
 end
 
