@@ -9,8 +9,8 @@ PrefabFiles = {
 "thorne_dachi",--荆棘
 "demon_blade",--妖刀·千盏繁华
 "rock_shovel",--多功能石铲
--- "gold_shovel",--多功能金铲
--- "tm_shovel"--多功能铥铲
+"gold_shovel",--多功能金铲
+"tm_shovel"--多功能铥铲
 "laser_pointer",--伪·蘑菇弹
 "hit_marks",--锁定打击
 }
@@ -105,51 +105,51 @@ AddRecipe("fox_mask",
 {Ingredient("cutgrass", 1)}, iiisakuratab,
 TECH.NONE, nil, nil, nil, nil, "iiisakura_builder",
 "images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
--- --狐狸面具：干草*5,、绳子*1、花瓣*5
--- AddRecipe("fox_mask",
--- {Ingredient("cutgrass", 5),Ingredient("rope", 1),Ingredient("petals", 5)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
--- --石刀：木板*1、石砖*1、绳子*1
--- AddRecipe("rock_dachi",
--- {Ingredient("boards", 1),Ingredient("cutstone", 1),Ingredient("rope", 1)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/rock_dachi.xml", "rock_dachi.tex" )
--- --荆棘：石刀、蜂刺*5
--- AddRecipe("thorne_dachi",
--- {Ingredient("rock_dachi", 1),Ingredient("stinger", 5)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/thorne_dachi.xml", "thorne_dachi.tex" )
--- --无形：石刀、噩梦燃料*5
--- AddRecipe("stealth_dachi",
--- {Ingredient("rock_dachi", 1),Ingredient("nightmarefuel", 5)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/stealth_dachi.xml", "stealth_dachi.tex" )
--- --梦魇：石刀*1、噩梦花瓣*5、紫宝石*1
--- AddRecipe("nightmare_dachi",
--- {Ingredient("rock_dachi", 1),Ingredient("petals_evil", 5),Ingredient("purplegem", 1)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/nightmare_dachi.xml", "nightmare_dachi.tex" )
--- --妖刀·千盏繁华：活木*8、铥矿*10、红宝石*2
--- AddRecipe("demon_blade",
--- {Ingredient("livinglog", 8),Ingredient("thulecite", 10),Ingredient("redgem", 2)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/demon_blade.xml", "demon_blade.tex" )
--- --多功能石铲：燧石*5、小树枝*5
--- AddRecipe("rock_shovel",
--- {Ingredient("flint", 5),Ingredient("twigs", 5)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/rock_shovel.xml", "rock_shovel.tex" )
--- --多功能金铲：金子*5、小树枝*10
--- AddRecipe("gold_shovel",
--- {Ingredient("goldnugget", 1),Ingredient("twigs", 10)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/gold_shovel.xml", "gold_shovel.tex" )
--- --多功能铥铲：铥矿*10、小树枝*10
--- AddRecipe("tm_shovel",
--- {Ingredient("thulecite", 1),Ingredient("twigs", 10)}, RECIPETABS.WAR,
--- TECH.NONE, nil, nil, nil, nil, nil,
--- "images/inventoryimages/tm_shovel.xml", "tm_shovel.tex" )
+--狐狸面具：干草*5,、绳子*1、花瓣*5
+AddRecipe("fox_mask",
+{Ingredient("cutgrass", 5),Ingredient("rope", 1),Ingredient("petals", 5)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
+--石刀：木板*1、石砖*1、绳子*1
+AddRecipe("rock_dachi",
+{Ingredient("boards", 1),Ingredient("cutstone", 1),Ingredient("rope", 1)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/rock_dachi.xml", "rock_dachi.tex" )
+--荆棘：石刀、蜂刺*5
+AddRecipe("thorne_dachi",
+{Ingredient("rock_dachi", 1),Ingredient("stinger", 5)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/thorne_dachi.xml", "thorne_dachi.tex" )
+--无形：石刀、噩梦燃料*5
+AddRecipe("stealth_dachi",
+{Ingredient("rock_dachi", 1),Ingredient("nightmarefuel", 5)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/stealth_dachi.xml", "stealth_dachi.tex" )
+--梦魇：石刀*1、噩梦花瓣*5、紫宝石*1
+AddRecipe("nightmare_dachi",
+{Ingredient("rock_dachi", 1),Ingredient("petals_evil", 5),Ingredient("purplegem", 1)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/nightmare_dachi.xml", "nightmare_dachi.tex" )
+--妖刀·千盏繁华：活木*8、铥矿*10、红宝石*2
+AddRecipe("demon_blade",
+{Ingredient("livinglog", 8),Ingredient("thulecite", 10),Ingredient("redgem", 2)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/demon_blade.xml", "demon_blade.tex" )
+--多功能石铲：燧石*5、小树枝*5
+AddRecipe("rock_shovel",
+{Ingredient("flint", 5),Ingredient("twigs", 5)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/rock_shovel.xml", "rock_shovel.tex" )
+--多功能金铲：金子*5、小树枝*10
+AddRecipe("gold_shovel",
+{Ingredient("goldnugget", 1),Ingredient("twigs", 10)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/gold_shovel.xml", "gold_shovel.tex" )
+--多功能铥铲：铥矿*10、小树枝*10
+AddRecipe("tm_shovel",
+{Ingredient("thulecite", 1),Ingredient("twigs", 10)}, RECIPETABS.WAR,
+TECH.NONE, nil, nil, nil, nil, nil,
+"images/inventoryimages/tm_shovel.xml", "tm_shovel.tex" )
 --蘑菇弹：红蓝绿蘑菇*20
 AddRecipe("laser_pointer",
 {Ingredient("petals", 1)}, RECIPETABS.TOWN,
