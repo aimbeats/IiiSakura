@@ -9,8 +9,8 @@ PrefabFiles = {
 "thorne_dachi",--荆棘
 "demon_blade",--妖刀·千盏繁华
 "rock_shovel",--多功能石铲
-"gold_shovel",--多功能金铲
-"tm_shovel"--多功能铥铲
+-- "gold_shovel",--多功能金铲
+-- "tm_shovel",--多功能铥铲
 "laser_pointer",--伪·蘑菇弹
 "hit_marks",--锁定打击
 }
@@ -77,6 +77,8 @@ local require = GLOBAL.require
 local STRINGS = GLOBAL.STRINGS
 local Ingredient = GLOBAL.Ingredient
 local RECIPETABS = GLOBAL.RECIPETABS
+local ACTIONS = GLOBAL.ACTIONS
+local ActionHandler = GLOBAL.ActionHandler
 local TECH = GLOBAL.TECH
 
 modimport("scripts/sakura_util/sakura_util.lua")
@@ -156,6 +158,39 @@ AddRecipe("laser_pointer",
 TECH.NONE, nil, nil, nil, nil, nil,
 "images/inventoryimages/laser_pointer.xml", "laser_pointer.tex" )
 
+--***************************************************************
+--动作注册
+--***********************************************************************
+-- local id = "CHARGE" --必须大写，动作会被加入到ACTIONS表中，key就是id。
+-- local name = "蓄力"
+-- local fn = function(act) -- 动作触发的函数。传入的是一个BufferedAction对象。可以通过它直接调用动作的执行者，目标，具体的动作内容等等，详情请查看bufferedaction.lua文件，也可以参考actions.lua里各个action的fn。
+--     if then
+--         act.target.components.workable:WorkedBy(act.doer,1)
+--         return true
+--     end
+-- end
+-- --注册动作
+-- AddAction(id,name,fn) -- 将上面编写的内容传入MOD API,添加动作。
+-- --绑定组件
+-- local type = "SCENE" -- 设置动作绑定的类型
+-- local component = "workable" -- 设置动作绑定的组件
+-- local testfn = function(inst, doer, actions, right) -- 设置动作的检测函数，如果满足条件，就向人物的动作可执行表中加入某个动作。right表示是否是右键动作。
+--     if inst:HasTag("") and doer:HasTag("player") then
+--         table.insert(actions, ACTIONS.CHARGE)
+--     end
+-- end
+-- AddComponentAction(type, component, testfn)
+-- AddComponentAction(type, component, testfn)
+
+-- --[[绑定state
+-- 在联机版中添加新动作需要对wilson和wilson_cient两个sg都进行state绑定。
+-- 此处选择的state最好是整个执行过程中某个阶段带有inst:PerformBufferedAction()语句的。这条语句是触发动作的fn用的。如果整个state里没有这句，则动作的fn是不会触发的，也就不会达到你预期的效果。
+-- 推荐使用的官方state: dostandingaction,doshortaction,dolongaction，dojostleaction
+-- 除此之外你也可以自行编写state，自己控制播放什么动画，何时触发动作的fn等等。需要注意的是主机端和客机端在这上面的代码是有区别，具体请参考官方的代码。--]]
+
+-- local state = "dojostleaction" -- 设定要绑定的state
+-- AddStategraphActionHandler("wilson",ActionHandler(ACTIONS.CHARGE, state))
+-- AddStategraphActionHandler("wilson_client",ActionHandler(ACTIONS.CHARGE,state))
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.MARISA =
 {

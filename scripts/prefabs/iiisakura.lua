@@ -153,10 +153,10 @@ local function windPressure(inst)
 		inst.components.hunger:DoDelta(-10)
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 8)
-		SpawnPrefab("groundpound_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载熊大的拍地板动画
+		SpawnPrefab("groundpoundring_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载熊大的拍地板动画
 		--检测人物范围内所有物体
 		for k,v in pairs(ents) do
-				--破坏树木
+				--对树木造成一次砍伐伤害
 				if v:HasTag("tree") and v.components.workable and v.components.workable.workleft > 0 then
 					v.components.workable:WorkedBy(inst,1)
 				end
@@ -200,7 +200,7 @@ local function dodge(inst)
 end
 --主动技能C：雷动
 local function topspeed(inst)
-	-- inst.components.sanity:DoDelta(-10)
+	--inst.components.sanity:DoDelta(-10)
 	--inst.AnimState:PlayAnimation("crash")--加载雷动动画
 	if not inst:HasTag("topspeed") then
 		inst.components.talker:Say("雷动已开启")
@@ -252,7 +252,7 @@ local function skill(inst)
 					inst.components.sanity:DoDelta(-20)
 					local pos = Vector3(inst.Transform:GetWorldPosition())
 					local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 10)
-					SpawnPrefab("groundpound_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载熊大的拍地板动画
+					SpawnPrefab("groundpoundring_fx").Transform:SetPosition(pos.x,pos.y,pos.z)--加载熊大的拍地板动画
 					--检测人物范围内所有物体
 					for k,v in pairs(ents) do
 						--破坏树木
