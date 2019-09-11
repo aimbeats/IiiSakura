@@ -236,16 +236,18 @@ local function skill(inst)
 	if not inst:HasTag("cd_heat") then
 		inst:AddTag("cd_heat")--赋上大招状态标签
 		
-		inst.components.talker:Say("瞬剑")
+		inst.components.talker:Say("繁华")
 		inst.components.locomotor:Stop()
 		--inst.AnimState:PlayAnimation("crash")--加载起手动画
 		inst:ListenForEvent("locomote",iswalk)--设置一个监听器监听是否在移动。
 		--1秒后开始攻击
 		inst:DoTaskInTime(1,function(inst)
-			inst.components.talker:Say("繁华落尽")
 			inst:AddTag("cd_skill")
+			inst:DoTaskInTime(1,function(inst)
+				inst.components.talker:Say("落尽！")
+			end)
 			--inst.AnimState:PlayAnimation("crash")--加载爆发时的动画
-			inst.skill_delayed = inst:DoPeriodicTask(2, function(inst)--每2秒对敌人造成90伤害
+			inst.skill_delayed = inst:DoPeriodicTask(1, function(inst)--每1秒对敌人造成90伤害
 				if not inst:HasTag("cancel_skill") then
 					inst.components.hunger:DoDelta(-20)
 					inst.components.health:DoDelta(-20)

@@ -62,8 +62,8 @@ local function fn()
     end
 	-- inst:DoTaskInTime(15, spark) --15秒后对目标区域进行核弹打击
     -- inst:DoTaskInTime(15.55, inst.Remove) --移除预设物
-	inst:DoTaskInTime(4.85, spark) --5秒后对目标区域进行核弹打击
-    inst:DoTaskInTime(5, inst.Remove) --移除预设物
+	inst:DoTaskInTime(10, spark) --10秒后对目标区域进行核弹打击
+    inst:DoTaskInTime(10.1, inst.Remove) --移除预设物
     return inst
 end
 
