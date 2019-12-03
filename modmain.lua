@@ -103,10 +103,10 @@ local iiisakuratab = AddRecipeTab( "专属", 999, "images/hud/iiisakuratab.xml",
 -- 最后一个参数，指明图片文档地址，用于制作栏显示图片。
 
 --狐狸面具：干草*5,、绳子*1、花瓣*5
-AddRecipe("fox_mask",
-{Ingredient("cutgrass", 1)}, iiisakuratab,
-TECH.NONE, nil, nil, nil, nil, "iiisakura_builder",
-"images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
+-- AddRecipe("fox_mask",
+-- {Ingredient("cutgrass", 1)}, iiisakuratab,
+-- TECH.NONE, nil, nil, nil, nil, "iiisakura_builder",
+-- "images/inventoryimages/fox_mask.xml", "fox_mask.tex" )
 --狐狸面具：干草*5,、绳子*1、花瓣*5
 AddRecipe("fox_mask",
 {Ingredient("cutgrass", 5),Ingredient("rope", 1),Ingredient("petals", 5)}, RECIPETABS.WAR,
